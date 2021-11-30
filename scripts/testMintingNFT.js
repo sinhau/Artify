@@ -51,5 +51,5 @@ async function mintNFT(ensName) {
 }
 
 mintNFT(
-    "karsh.eth"
+    "thisiscool.eth"
 )

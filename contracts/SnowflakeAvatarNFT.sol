@@ -49,7 +49,7 @@ contract SnowflakeAvatarNFT is ERC721 {
      */
     function generateArt(string memory seed) internal pure returns (bytes memory) {
         return bytes(abi.encodePacked(
-            '<svg width="350" height="350" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#prefix__a)"/><defs><linearGradient id="prefix__a" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fcd744"/><stop offset=".091" stop-color="#fad242"/><stop offset=".182" stop-color="#f4c53e"/><stop offset=".273" stop-color="#ebb338"/><stop offset=".364" stop-color="#e19c30"/><stop offset=".455" stop-color="#d58329"/><stop offset=".545" stop-color="#c86b21"/><stop offset=".636" stop-color="#bc551b"/><stop offset=".727" stop-color="#b24215"/><stop offset=".818" stop-color="#a93311"/><stop offset=".909" stop-color="#a32a0f"/><stop offset="1" stop-color="#a1270e"/></linearGradient></defs><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" style="font:700 20px sans-serif" fill="#fff">',
+            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#prefix__a)"/><defs><linearGradient id="prefix__a" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fcd744"/><stop offset=".091" stop-color="#fad242"/><stop offset=".182" stop-color="#f4c53e"/><stop offset=".273" stop-color="#ebb338"/><stop offset=".364" stop-color="#e19c30"/><stop offset=".455" stop-color="#d58329"/><stop offset=".545" stop-color="#c86b21"/><stop offset=".636" stop-color="#bc551b"/><stop offset=".727" stop-color="#b24215"/><stop offset=".818" stop-color="#a93311"/><stop offset=".909" stop-color="#a32a0f"/><stop offset="1" stop-color="#a1270e"/></linearGradient></defs><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" style="font:700 100% sans-serif" fill="#fff">',
             seed,
             '</text></svg>'));
     }
@@ -68,7 +68,7 @@ contract SnowflakeAvatarNFT is ERC721 {
                     bytes(
                         abi.encodePacked(
                             '{"name":"Snowflake for ', seed, '",',
-                            '"description":"Each snowflake is a one of a kind on-chain generated SVG which is seeded by the ENS domain name of the minter.  This avatar was originally minted by "', seed,
+                            '"description":"Each snowflake is a one of a kind on-chain generated SVG which is seeded by the ENS domain name of the minter.  This avatar was originally minted by ', seed, '",',
                             '"image":"data:image/svg+xml;base64,', image, '"}'
                         )
                     )
