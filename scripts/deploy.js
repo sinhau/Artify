@@ -1,9 +1,9 @@
 async function main() {
-    const AnonHumansNFTContractFactory = await ethers.getContractFactory("AnonHumansNFT")
+    const SnowflakeAvatarNFTContractFactory = await ethers.getContractFactory("SnowflakeAvatarNFT")
   
     // Start deployment, returning a promise that resolves to a contract object
-    const AnonHumansNFT = await AnonHumansNFTContractFactory.deploy()
-    console.log("Contract deployed to address:", AnonHumansNFT.address)
+    const SnowflakeAvatarNFT = await SnowflakeAvatarNFTContractFactory.deploy()
+    console.log("Contract deployed to address:", SnowflakeAvatarNFT.address)
 }
   
 main()
