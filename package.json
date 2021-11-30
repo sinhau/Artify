@@ -1,0 +1,30 @@
+{
+  "name": "snowflakeensavatar",
+  "version": "1.0.0",
+  "description": "Upgrade your ENS NFT's avatar metadata by generating a unique snowflake avatar based on NFT minter's ENS name",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinhau/SnowflakeENSAvatar.git"
+  },
+  "author": "Utkarsh Sinha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sinhau/SnowflakeENSAvatar/issues"
+  },
+  "homepage": "https://github.com/sinhau/SnowflakeENSAvatar#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "ethers": "^5.5.1",
+    "hardhat": "^2.7.0"
+  },
+  "dependencies": {
+    "@alch/alchemy-web3": "^1.1.8",
+    "@openzeppelin/contracts": "^4.4.0",
+    "base64-sol": "^1.1.0",
+    "dotenv": "^10.0.0"
+  }
+}
