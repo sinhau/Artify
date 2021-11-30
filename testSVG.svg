@@ -1,6 +1,6 @@
 <svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212">
-    <rect width="100%" height="100%" fill="url(#prefix__a)" />
     <defs>
+        <!-- Background gradient -->
         <linearGradient id="prefix__a" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#fcd744" />
             <stop offset=".091" stop-color="#fad242" />
@@ -15,6 +15,20 @@
             <stop offset=".909" stop-color="#a32a0f" />
             <stop offset="1" stop-color="#a1270e" />
         </linearGradient>
-    </defs><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" style="font:1000 100% sans-serif"
-        fill="#fff">karsh.eth</text>
+
+        <!-- This is where we will define different components of the snowflake -->
+        <polyline id="triangle" points="0,0 30,0 15,25.98" fill="#333cb3" stroke="#333cb3" stroke-width="0"/>
+    </defs>
+
+    <!-- This is where we will assemble the snowflake from the different components -->
+    <rect width="100%" height="100%" fill="url(#prefix__a)" />
+    <g>
+        <use xlink:href="#triangle" transform="translate(135, 135) rotate(0,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#triangle" transform="translate(135, 135) rotate(60,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#triangle" transform="translate(135, 135) rotate(120,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#triangle" transform="translate(135, 135) rotate(180,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#triangle" transform="translate(135, 135) rotate(240,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#triangle" transform="translate(135, 135) rotate(300,0,0)" opacity="50%" fill-opacity="50%"/>
+        <animateMotion dur="1s" repeatCount="indefinite" path="M0,0 C20,-50 180,150 180,50 C180-50 20,150 20,50 z" />
+    </g>
 </svg>
