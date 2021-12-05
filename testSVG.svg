@@ -1,7 +1,7 @@
 <svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212">
     <defs>
         <!-- Background gradient -->
-        <linearGradient id="prefix__a" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">
+        <linearGradient id="background_gradient" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#fcd744" />
             <stop offset=".091" stop-color="#fad242" />
             <stop offset=".182" stop-color="#f4c53e" />
@@ -16,19 +16,33 @@
             <stop offset="1" stop-color="#a1270e" />
         </linearGradient>
 
-        <!-- This is where we will define different components of the snowflake -->
-        <polyline id="triangle" points="0,0 30,0 15,25.98" fill="#333cb3" stroke="#333cb3" stroke-width="0"/>
+        <!-- Generate n number of m sided polygons -->
+        <polyline id="poly1" points="0,0 10,0 50,50 40,20, 0,0" stroke="blue" stroke-width="1" stroke-opacity="20%" fill="green"/>
+        <polyline id="poly2" points="0,0 60,0 10,14 30,50, 0,0" stroke="blue" stroke-width="1" stroke-opacity="20%" fill="green"/>
+
+        <!-- For each polygon created above, create a group of n rotated/skewed/transformed polygons -->
+        <g id="all_polys">
+            <g id="poly1_group">
+                <use xlink:href="#poly1" transform="rotate(30,0,0) rotate(42,0,0)"/>
+                <use xlink:href="#poly1" transform="rotate(30,0,0) translate(5,24) rotate(42,0,0)"/>
+                <use xlink:href="#poly1" transform="rotate(20,0,0) translate(3,38) rotate(22,0,0)"/>
+            </g>
+            <g id="poly2_group">
+                <use xlink:href="#poly2" transform="rotate(30,0,0) rotate(42,0,0)"/>
+                <use xlink:href="#poly2" transform="rotate(30,0,0) translate(5,24) rotate(42,0,0)"/>
+                <use xlink:href="#poly2" transform="rotate(20,0,0) translate(3,38) rotate(22,0,0)"/>
+            </g>
     </defs>
 
     <!-- This is where we will assemble the snowflake from the different components -->
-    <rect width="100%" height="100%" fill="url(#prefix__a)" />
+    <rect width="100%" height="100%" fill="url(#background_gradient)" />
     <g>
-        <use xlink:href="#triangle" transform="translate(135, 135) rotate(0,0,0)" opacity="50%" fill-opacity="50%"/>
-        <use xlink:href="#triangle" transform="translate(135, 135) rotate(60,0,0)" opacity="50%" fill-opacity="50%"/>
-        <use xlink:href="#triangle" transform="translate(135, 135) rotate(120,0,0)" opacity="50%" fill-opacity="50%"/>
-        <use xlink:href="#triangle" transform="translate(135, 135) rotate(180,0,0)" opacity="50%" fill-opacity="50%"/>
-        <use xlink:href="#triangle" transform="translate(135, 135) rotate(240,0,0)" opacity="50%" fill-opacity="50%"/>
-        <use xlink:href="#triangle" transform="translate(135, 135) rotate(300,0,0)" opacity="50%" fill-opacity="50%"/>
-        <animateMotion dur="1s" repeatCount="indefinite" path="M0,0 C20,-50 180,150 180,50 C180-50 20,150 20,50 z" />
+        <use xlink:href="#all_polys" transform="translate(135, 135) rotate(0,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#all_polys" transform="translate(135, 135) rotate(60,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#all_polys" transform="translate(135, 135) rotate(120,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#all_polys" transform="translate(135, 135) rotate(180,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#all_polys" transform="translate(135, 135) rotate(240,0,0)" opacity="50%" fill-opacity="50%"/>
+        <use xlink:href="#all_polys" transform="translate(135, 135) rotate(300,0,0)" opacity="50%" fill-opacity="50%"/>
     </g>
+
 </svg>
