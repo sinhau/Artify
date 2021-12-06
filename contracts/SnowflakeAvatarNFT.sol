@@ -48,10 +48,49 @@ contract SnowflakeAvatarNFT is ERC721 {
      * Returns the SVG image as bytes
      */
     function generateArt(string memory seed) internal pure returns (bytes memory) {
+        uint memory _seed = uint(keccak256(abi.encode(seed)));
+
+        // Get number of initial polygons to create
+        uint memory _numberOfInitialPolygons = seededRandom(3, 10, _seed);
+
+        // Generate SVG elements for the initial polygons
+        string[] memory _initialPolygonsSVG = new string[_numberOfInitialPolygons];
+        for (uint i = 0; i < _numberOfInitialPolygons; i++) {
+            _initialPolygonsSVG[i] = generatePolylineElement();
+        }
+
         return bytes(abi.encodePacked(
-            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#prefix__a)"/><defs><linearGradient id="prefix__a" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fcd744"/><stop offset=".091" stop-color="#fad242"/><stop offset=".182" stop-color="#f4c53e"/><stop offset=".273" stop-color="#ebb338"/><stop offset=".364" stop-color="#e19c30"/><stop offset=".455" stop-color="#d58329"/><stop offset=".545" stop-color="#c86b21"/><stop offset=".636" stop-color="#bc551b"/><stop offset=".727" stop-color="#b24215"/><stop offset=".818" stop-color="#a93311"/><stop offset=".909" stop-color="#a32a0f"/><stop offset="1" stop-color="#a1270e"/></linearGradient></defs><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" style="font:700 100% sans-serif" fill="#fff">',
-            seed,
-            '</text></svg>'));
+            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#background_gradient)"/>',
+                '<defs>',
+                    '<linearGradient id="background_gradient" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">',
+                        '<stop offset="0" stop-color="#fcd744"/>',
+                        '<stop offset="1" stop-color="#a1270e"/>',
+                    '</linearGradient>',
+                '</defs>',
+            '</svg>'));
+    }
+
+    /**
+     * @dev Generate polyline element.
+     * Returns string containing SVG polyline element
+     */
+    function generatePolylineElement() internal pure returns (string memory) {
+        // Get number of points to create in the polygon
+        uint memory _numberOfPoints = seededRandom(3, 10, _seed);
+        
+        return ""
+        // <polyline id="poly1" points="0,0 4,2 19,33 19,3, 0,0" stroke="#ff00f2" stroke-width="2" stroke-opacity="20%" fill="#945f10" fill-opacity="50%"/>
+    }
+
+    /**
+     * @dev Generate random number using the provided seed between provided min and max
+     * @param min The minimum number
+     * @param max The maximum number
+     * @param seed The seed to generate the random number from
+     * Returns the random number
+     */
+    function seededRandom(uint256 min, uint256 max, uint256 seed) internal pure returns (uint256) {
+        return (seed % (max - min)) + min;
     }
 
     /**
