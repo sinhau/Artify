@@ -92,7 +92,7 @@ contract SnowflakeAvatarNFT is ERC721 {
 
         // Assemble SVG
         return bytes(abi.encodePacked(
-            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#background_gradient)"/>',
+            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#background_gradient)">',
                 '<defs>',
                     '<linearGradient id="background_gradient" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">',
                         '<stop offset="0" stop-color="#fcd744"/>',
