@@ -92,7 +92,7 @@ contract SnowflakeAvatarNFT is ERC721 {
 
         // Assemble SVG
         return bytes(abi.encodePacked(
-            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212"><rect width="100%" height="100%" fill="url(#background_gradient)">',
+            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212">',
                 '<defs>',
                     '<linearGradient id="background_gradient" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">',
                         '<stop offset="0" stop-color="#fcd744"/>',
@@ -125,7 +125,7 @@ contract SnowflakeAvatarNFT is ERC721 {
                             '<animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;24;0" dur="7s" repeatCount="indefinite" additive="sum"/>',
                         '</g>',
                 '</defs>',
-                '<rect width="100%" height="100%" fill="url(#background_gradient)" />',
+                '<rect width="100%" height="100%" />',
                 '<g>',
                     '<use xlink:href="#all_polys" transform="translate(135, 135) rotate(0,0,0)" opacity="50%" fill-opacity="50%"/>',
                     '<use xlink:href="#all_polys" transform="translate(135, 135) rotate(60,0,0)" opacity="50%" fill-opacity="50%"/>',
@@ -188,7 +188,7 @@ contract SnowflakeAvatarNFT is ERC721 {
      *
      * Returns the polygon point position as a string
      */
-    function getPolygonPoint(uint seed, uint seedModFactor) public pure returns (string memory, uint) {
+    function getPolygonPoint(uint seed, uint seedModFactor) internal pure returns (string memory, uint) {
         // Get the polygon point (between -50 and 50)
         seedModFactor += 1;
         uint _polygonPointX = seed % seedModFactor % 100;
