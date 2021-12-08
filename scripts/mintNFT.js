@@ -20,7 +20,7 @@ async function mintNFT(ensName) {
     from: PUBLIC_KEY,
     to: CONTRACT_ADDRESS,
     nonce: nonce,
-    gas: 5000000,
+    gas: 15000000,
     data: nftContract.methods.mintNFT(PUBLIC_KEY, ensName).encodeABI(),
   };
 
