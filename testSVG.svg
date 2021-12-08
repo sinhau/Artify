@@ -1,1 +1,109 @@
-<svg version='1.1' width='270' height='270' viewbox='0 0 270 270' xmlns='http://www.w3.org/2000/svg' style='background-color:#121212'><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(0,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(156,151,254)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(0,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='rgb(249,84,199)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(0,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='rgb(248,160,128)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(0,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='rgb(171,214,222)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(60,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(156,151,254)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(60,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='rgb(249,84,199)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(60,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='rgb(248,160,128)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(60,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='rgb(171,214,222)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(120,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(156,151,254)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(120,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='rgb(249,84,199)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(120,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='rgb(248,160,128)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(120,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='rgb(171,214,222)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(180,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(156,151,254)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(180,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='rgb(249,84,199)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(180,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='rgb(248,160,128)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(180,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='rgb(171,214,222)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(240,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(156,151,254)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(240,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='rgb(249,84,199)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(240,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='rgb(248,160,128)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(240,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='rgb(171,214,222)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(300,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(156,151,254)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(300,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='rgb(249,84,199)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(300,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='rgb(248,160,128)' /><polyline id='poly' points='0,0 -5,27 -12,-2 -25,-22 -0,-2 32,44  0,0' transform='translate(135, 135) rotate(300,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='rgb(171,214,222)' /></svg>
+<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg'
+    style='background-color:#121212'>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(0,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(189,41,195)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;25;0;-25;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;10;0;-10;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(0,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)'
+        fill='rgb(82,109,148)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;25;0;-25;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;10;0;-10;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(0,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)'
+        fill='rgb(135,47,125)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;25;0;-25;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;10;0;-10;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(0,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)'
+        fill='rgb(102,51,81)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;25;0;-25;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;10;0;-10;0" dur="3s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(60,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='rgb(189,41,195)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="5s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;20;0;-20;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;15;0;-15;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(60,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)'
+        fill='rgb(82,109,148)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="5s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;20;0;-20;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;15;0;-15;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(60,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)'
+        fill='rgb(135,47,125)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="5s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;20;0;-20;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;15;0;-15;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(60,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)'
+        fill='rgb(102,51,81)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="5s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;20;0;-20;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;15;0;-15;0" dur="5s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(120,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)'
+        fill='rgb(189,41,195)' >
+        <animate attributeName="opacity" values="1;0.3;1" dur="7s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewX" values="0;15;0;-15;0" dur="7s" repeatCount="indefinite" additive="sum"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="skewY" values="0;20;0;-20;0" dur="7s" repeatCount="indefinite" additive="sum"/>
+    </polyline>
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(120,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)'
+        fill='rgb(82,109,148)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(120,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)'
+        fill='rgb(135,47,125)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(120,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)'
+        fill='rgb(102,51,81)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(180,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)'
+        fill='rgb(189,41,195)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(180,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)'
+        fill='rgb(82,109,148)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(180,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)'
+        fill='rgb(135,47,125)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(180,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)'
+        fill='rgb(102,51,81)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(240,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)'
+        fill='rgb(189,41,195)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(240,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)'
+        fill='rgb(82,109,148)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(240,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)'
+        fill='rgb(135,47,125)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(240,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)'
+        fill='rgb(102,51,81)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(300,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)'
+        fill='rgb(189,41,195)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(300,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)'
+        fill='rgb(82,109,148)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(300,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)'
+        fill='rgb(135,47,125)' />
+    <polyline id='poly' points='0,0 129,-73 -32,149 -61,95 144,-1 -56,89  0,0'
+        transform='translate(320, 320) rotate(300,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)'
+        fill='rgb(102,51,81)' />
+</svg>
