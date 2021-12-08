@@ -17,4 +17,6 @@ async function getTokenArt(tokenID) {
   console.log(resp);
 }
 
-getTokenArt(2);
+var tokenID = process.argv[2];
+console.log('Getting art for tokenID: ', tokenID);
+getTokenArt(tokenID);

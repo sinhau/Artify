@@ -43,13 +43,16 @@ async function mintNFT(ensName) {
             );
           }
         }
-      );
+      ).then(() => {
+        console.log("Minted NFT");
+      });
     })
     .catch((err) => {
       console.log(" Promise failed:", err);
     });
 
-  console.log("Minted NFT");
 }
 
-mintNFT("facebook.eth");
+var ensName = process.argv[2];
+console.log("Minting NFT for: ", ensName);
+mintNFT(ensName);

@@ -99,9 +99,63 @@ contract AvatarForENS is ERC721 {
         string[4] memory _colors;
         (_colors, _seedModFactor) = generateColors(_seed, _seedModFactor);
 
-        // Assemble SVG
+        string memory _polyGroup1;
+        _polyGroup1 = string(abi.encodePacked(
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(0,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(0,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(0,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(0,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "' />"
+        ));
+
+        string memory _polyGroup2;
+        _polyGroup2 = string(abi.encodePacked(
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(60,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(60,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(60,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(60,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "' />"
+        ));
+
+        string memory _polyGroup3;
+        _polyGroup3 = string(abi.encodePacked(
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(120,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(120,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(120,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(120,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "' />"
+        ));
+
+        string memory _polyGroup4;
+        _polyGroup4 = string(abi.encodePacked(
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(180,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(180,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(180,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(180,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "' />"
+        ));
+
+        string memory _polyGroup5;
+        _polyGroup5 = string(abi.encodePacked(
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(240,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(240,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(240,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(240,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "' />"
+        ));
+
+        string memory _polyGroup6;
+        _polyGroup6 = string(abi.encodePacked(
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(300,0,0) matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(300,0,0) matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(300,0,0) matrix(.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "' />",
+            "<", _mainPolygon, " transform='translate(320, 320) rotate(300,0,0) matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "' />"
+        ));
+
+        return string(abi.encodePacked(
+            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' style='background-color:#121212'>",
+            _polyGroup1, _polyGroup2, _polyGroup3, _polyGroup4, _polyGroup5, _polyGroup6,
+            "</svg>"
+        ));
+
+        //Assemble SVG
         // return string(abi.encodePacked(
-        //     '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212">',
+        //     '<svg version="1.1" width="270" height="270" viewbox="0 0 270 270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212">',
         //         '<defs>',
         //             _mainPolygon,
         //             '<g id="poly_group">',
@@ -138,27 +192,6 @@ contract AvatarForENS is ERC721 {
         //             '<animateTransform attributeName="transform" attributeType="XML" type="rotate" values="0 135 135;360 135 135" dur="30s" repeatCount="indefinite"/>',
         //         '</g>',
         //     '</svg>'));
-        return string(abi.encodePacked(
-            '<svg width="270" height="270" xmlns="http://www.w3.org/2000/svg" style="background-color:#121212">',
-                '<defs>',
-                    _mainPolygon,
-                    '<g id="poly_group">',
-                        '<use xlink:href="#poly" transform="matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)" fill="', _colors[0], '"/>',
-                        '<use xlink:href="#poly" transform="matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)" fill="', _colors[1], '"/>',
-                        '<use xlink:href="#poly" transform="matrix(0.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)" fill="', _colors[2], '"/>',
-                        '<use xlink:href="#poly" transform="matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)" fill="', _colors[3], '"/>',
-                    '</g>',
-                '</defs>',
-                '<rect width="100%" height="100%" />',
-                '<g>',
-                    '<use xlink:href="#poly_group" transform="translate(135, 135) rotate(0,0,0)"/>',
-                    '<use xlink:href="#poly_group" transform="translate(135, 135) rotate(60,0,0)" />',
-                    '<use xlink:href="#poly_group" transform="translate(135, 135) rotate(120,0,0)" />',
-                    '<use xlink:href="#poly_group" transform="translate(135, 135) rotate(180,0,0)" />',
-                    '<use xlink:href="#poly_group" transform="translate(135, 135) rotate(240,0,0)" />',
-                    '<use xlink:href="#poly_group" transform="translate(135, 135) rotate(300,0,0)" />',
-                '</g>',
-            '</svg>'));
     }
 
     /**
@@ -170,12 +203,11 @@ contract AvatarForENS is ERC721 {
      * Returns the SVG polyline element
      */
     function generatePolyline(uint seed, uint seedModFactor) internal pure returns (string memory, uint) {
-        // Get number of sides for the polygon (between 3-6)
         seedModFactor += 1;
         uint _numberOfSides = 6;
 
         string memory _polyline = string(abi.encodePacked(
-            '<polyline id="poly" points="0,0 '
+            "polyline id='poly' points='0,0 "
         ));
 
         // Generate points for the polygon
@@ -192,7 +224,7 @@ contract AvatarForENS is ERC721 {
         // Close the polygon
         _polyline = string(abi.encodePacked(
             _polyline,
-            ' 0,0" />' 
+            " 0,0'" 
         ));
 
         return (_polyline, seedModFactor);
@@ -209,18 +241,18 @@ contract AvatarForENS is ERC721 {
     function getPolygonPoint(uint seed, uint seedModFactor) internal pure returns (string memory, uint) {
         // Get the polygon point (between -50 and 50)
         seedModFactor += 1;
-        uint _polygonPointX = seed % seedModFactor % 100;
+        uint _polygonPointX = seed % seedModFactor % 300;
 
         seedModFactor += 1;
-        uint _polygonPointY = seed % seedModFactor % 100;
+        uint _polygonPointY = seed % seedModFactor % 300;
 
 
         // Get the polygon point position as string
         string memory _polygonPoint = string(abi.encodePacked(
-            _polygonPointX <= 50 ? '-' : '',
+            _polygonPointX <= 150 ? '-' : '',
             Strings.toString(_polygonPointX/2),
             ',',
-            _polygonPointY <= 50 ? '-' : '',
+            _polygonPointY <= 150 ? '-' : '',
             Strings.toString(_polygonPointY/2)
         ));
 
