@@ -239,7 +239,7 @@ contract AvatarForENS is ERC721 {
      * Returns the polygon point position as a string
      */
     function getPolygonPoint(uint seed, uint seedModFactor) internal pure returns (string memory, uint) {
-        // Get the polygon point (between -50 and 50)
+        // Get the polygon point (between -150 and 150)
         seedModFactor += 1;
         uint _polygonPointX = seed % seedModFactor % 300;
 
