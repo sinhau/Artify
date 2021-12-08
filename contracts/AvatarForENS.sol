@@ -148,6 +148,7 @@ contract AvatarForENS is ERC721 {
         ));
 
         return string(abi.encodePacked(
+            "<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>",
             "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' style='background-color:#121212'>",
             _polyGroup1, _polyGroup2, _polyGroup3, _polyGroup4, _polyGroup5, _polyGroup6,
             "</svg>"
