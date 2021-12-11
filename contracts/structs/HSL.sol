@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
  */
 
 struct HSL {
-    uint16 hue;
-    uint8 saturation;
-    uint8 lightness;
+    uint hue;
+    uint saturation;
+    uint lightness;
 }
