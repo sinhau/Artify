@@ -14,7 +14,7 @@ library HSLGenerator {
      * @dev Generate full pallette of HSL colors based on given color scheme and root hue, saturation, and lightness
      * Returns an array of HSL colors
      */
-    function generateHSL(string memory colorScheme, uint rootHue, uint rootSaturation, uint rootLightness) public pure returns (HSL[3] memory HSLColors) {
+    function generateHSLPalette(string memory colorScheme, uint rootHue, uint rootSaturation, uint rootLightness) public pure returns (HSL[3] memory HSLColors) {
         require(keccak256(abi.encodePacked(colorScheme)) == keccak256(abi.encodePacked("triadic")) || keccak256(abi.encodePacked(colorScheme)) == keccak256(abi.encodePacked("split_complimentary")), "Invalid color scheme.  Only triadic and split_complimentary are supported right now.");
         require(rootSaturation > 0 && rootSaturation <= 100, "Invalid saturation.  Must be between 1 and 100.");
         require(rootLightness > 0 && rootLightness <= 100, "Invalid lightness.  Must be between 1 and 100.");

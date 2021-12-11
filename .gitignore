@@ -4,3 +4,4 @@ artifacts
 cache
 .trunk
 .markdownlint.yaml
+.DS_Store
