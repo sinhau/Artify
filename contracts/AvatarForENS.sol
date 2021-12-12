@@ -1,11 +1,18 @@
-//Contract based on [https://docs.openzeppelin.com/contracts/3.x/erc721](https://docs.openzeppelin.com/contracts/3.x/erc721)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
+/**
+ * @title On-chain generated SVG art based on seed phrase 
+ * @author Utkarsh Sinha <sinha.karsh@gmail.com>
+ */
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import 'base64-sol/base64.sol';
+import "base64-sol/base64.sol";
+import "./libraries/SeededRandomGenerator.sol";
+import "./libraries/HSLGenerator.sol";
+import "./libraries/SVGGenerator.sol";
 
 
 contract AvatarForENS is ERC721 {
@@ -14,8 +21,6 @@ contract AvatarForENS is ERC721 {
     uint256 private _tokenID;
 
     constructor() public ERC721("AvatarForENS", "ENSAVATAR") {}
-
-    // event PermanentURI(string _value, uint256 indexed _id);
 
     /**
      * @dev Mints a new NFT token.
@@ -33,10 +38,6 @@ contract AvatarForENS is ERC721 {
 
         // Generate token art
         _tokenArt[_tokenID] = generateArt(ensName);
-
-        // Freeze the tokenURI
-        // string memory _tokenURI = tokenURI(_tokenID);
-        // emit PermanentURI(_tokenURI, _tokenID);
 
         return _tokenID;
     }
@@ -94,22 +95,24 @@ contract AvatarForENS is ERC721 {
      * Returns the SVG image as bytes
      */
     function generateArt(string memory seed) internal pure returns (string memory) {
-        uint _seed = uint(keccak256(abi.encode(seed)));
-        uint _seedModFactor = 100000;
+        bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
 
         // Generate SVG elements for the initial polygons
         string memory _mainPolygon;
-        (_mainPolygon, _seedModFactor) = generatePolyline(_seed, _seedModFactor);
+        int numOfEdges;
+        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 10);
+        (_mainPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(numOfEdges), "poly", -100, 100);
 
         // Generate colors
         string[4] memory _colors;
-        (_colors, _seedModFactor) = generateColors(_seed, _seedModFactor);
+        uint _seedModFactor;
+        (_colors, _seedModFactor) = generateColors(uint(hashOfSeed), 100000);
 
         // Assemble SVG
         return string(abi.encodePacked(
             "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:#121212'>",
                 "<defs>",
-                    "<", _mainPolygon, "/>",
+                    _mainPolygon,
                     "<g id='poly_group'>",
                         "<use xlink:href='#poly' transform='matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "'>",
                             "<animate attributeName='opacity' values='1;0.3;1' dur='3s' repeatCount='indefinite'/>",
