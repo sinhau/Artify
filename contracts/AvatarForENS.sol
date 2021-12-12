@@ -61,7 +61,7 @@ contract AvatarForENS is ERC721 {
      *
      * Returns SVG art as XML formatted string.
      */
-    function getArt(uint256 tokenID) public view returns (string memory)
+    function getArt(uint256 tokenID) external view returns (string memory)
     {
         return _tokenArt[tokenID];
     }
@@ -147,11 +147,12 @@ contract AvatarForENS is ERC721 {
 
         // Assemble SVG
         return string(abi.encodePacked(
-            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:#121212'>",
+            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>",
                 "<defs>",
                     parentPolygon,
                     polygonGroups,
                 "</defs>",
+                "<rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/>",
                 "<g>",
                     "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/>",
                     "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' />",
