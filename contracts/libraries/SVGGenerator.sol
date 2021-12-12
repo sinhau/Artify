@@ -9,6 +9,7 @@ pragma solidity ^0.8.0;
 import "./SeededRandomGenerator.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./HSLGenerator.sol";
+import "../structs/AnimateTransformInputs.sol";
 
 /**
  * @dev Utility functions for converting int to string
@@ -121,6 +122,30 @@ library SVGGenerator {
     }
 
     /**
+     * @dev Generate a animate SVG element
+     * @param attributeName The attribute to animate
+     * @param values An string of values to animate to
+     * @param dur Duration of the animation
+     * Returns an animate SVG element as a string
+     */
+    function generateAnimate(string memory attributeName, string memory values, int dur) internal pure returns (string memory animate) {
+        animate = string(abi.encodePacked(
+            "<animate attributeName='", attributeName, "' values='", values, "' dur='", intToString(dur), "s' repeatCount='indefinite'/>"
+        ));
+    }
+
+    /**
+     * @dev Generate a animateTransform SVG element
+     * @param input Input contaning AnimateTransformInputs type
+     * Returns an animate SVG element as a string
+     */
+    function generateAnimateTransform(AnimateTransformInputs memory input) internal pure returns (string memory animate) {
+        animate = string(abi.encodePacked(
+            "<animateTransform attributeName='", input.attributeName, "' attributeType='", input.attributeType, "' type='", input.typeOfTransform, "' values='", input.values, "' dur='", intToString(input.dur), "s' repeatCount='indefinite' additive='sum'/>"
+        ));
+    }
+
+    /**
      * @dev Generate a polygon group element
      * @param currentHashOfSeed The seed to use for generating the polygon group params
      * @param id ID of the parent polygon group element
@@ -137,31 +162,67 @@ library SVGGenerator {
         // Generate translate transformation
         string memory translate;
         if (polygonIndex == 1) {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 0, 10);
+            translate = "translate(0,0)";
         } else if (polygonIndex == 2) {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 15, 30, 0, 10);
+            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 30, 40, 0, 10);
         } else if (polygonIndex == 3) {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 15, 30);
+            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 30, 40);
         } else {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 10*int(polygonIndex), 10*int(polygonIndex) + 20, 10*int(polygonIndex), 10*int(polygonIndex) + 20);
+            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 10*int(polygonIndex), 10*int(polygonIndex) + 10, 10*int(polygonIndex), 10*int(polygonIndex) + 10);
         }
 
         polygonGroup = string(abi.encodePacked(polygonGroup, transformMatrix, " ", translate,"' fill='", HSLGenerator.toString(color), "' >"));
 
         // Generate animations
+        string memory animate = generateAnimate("opacity", "1;0.3;1", 2 * int(polygonIndex));
 
-        polygonGroup = string(abi.encodePacked(polygonGroup, "</use>"));
+        int skewFactor;
+        (skewFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 7, 12);
+        int dur = 2 * int(polygonIndex);
 
-        // string memory polygon;
-        // (polygon, currentHashOfSeed) = generatePolygon(currentHashOfSeed, 6, id, -400, 65);
+        string memory animateTransformX;
+        string memory animateTransformXValues;
+        animateTransformXValues = string(abi.encodePacked(
+            "0;",
+            intToString(skewFactor * int(polygonIndex)),";",
+            "0;",
+            intToString(-skewFactor * int(polygonIndex)),";",
+            "0"
+        ));
+        AnimateTransformInputs memory input = AnimateTransformInputs(
+            "transform",
+            "XML",
+            "skewX",
+            animateTransformXValues,
+            dur
+        );
+        animateTransformX = generateAnimateTransform(input);
 
-        // polygonGroup = string(abi.encodePacked(
-        //     "<g id='", id, "' ",
-        //     "transform='", transformMatrix, "' ",
-        //     "fill='", color, "'>",
-        //     polygon,
-        //     "</g>"
-        // ));
+        string memory animateTransformY;
+        string memory animateTransformYValues;
+        animateTransformYValues = string(abi.encodePacked(
+            "0;",
+            intToString(-skewFactor * int(polygonIndex)),";",
+            "0;",
+            intToString(skewFactor * int(polygonIndex)),";",
+            "0"
+        ));
+        input = AnimateTransformInputs(
+            "transform",
+            "XML",
+            "skewY",
+            animateTransformYValues,
+            dur
+        );
+        animateTransformY = generateAnimateTransform(input);
+
+        polygonGroup = string(abi.encodePacked(
+            polygonGroup,
+            animate,
+            animateTransformX,
+            animateTransformY,
+             "</use>"
+        ));
 
         newHashOfSeed = currentHashOfSeed;
     }
