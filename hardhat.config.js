@@ -5,7 +5,7 @@
  require("@nomiclabs/hardhat-ethers");
  const { RINKEBY_API_URL, PRIVATE_KEY } = process.env;
  module.exports = {
-    solidity: "0.8.0",
+    solidity: "0.8.9",
     defaultNetwork: "rinkeby",
     networks: {
        hardhat: {},

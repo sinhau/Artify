@@ -10,7 +10,6 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "base64-sol/base64.sol";
-import "./libraries/SeededRandomGenerator.sol";
 import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
@@ -78,16 +77,39 @@ contract AvatarForENS is ERC721 {
         ArtAttributes memory artAttributes;
         (artAttributes, ) = SVGGenerator.generateArtAttributes(seed);
 
+        string memory colorScheme;
+        if (artAttributes.colorScheme == 1) {
+            colorScheme = "triadic";
+        } else if (artAttributes.colorScheme == 2) {
+            colorScheme = "split_complimentary";
+        } else if (artAttributes.colorScheme == 3) {
+            colorScheme = "analogous";
+        }
+
+        HSL memory hsl = HSL(uint(artAttributes.rootHue), uint(artAttributes.rootSaturation), uint(artAttributes.rootLightness));
+
         // Assemble attributes string
         string memory attributes = "";
-        // attributes = string(abi.encodePacked(
-        //     "[",
-        //         "{",
-        //             '"trait_type":"Polygon Edge Count",',
-        //             '"value":"', Strings.toString(uint(artAttributes.numOfEdges)),'"',
-        //         "},",
-        //     "]"
-        // ));
+        attributes = string(abi.encodePacked(
+            "[",
+                "{",
+                    '"trait_type":"Polygon Edge Count",',
+                    '"value":"', Strings.toString(uint(artAttributes.numOfEdges)),'"',
+                "},",
+                "{",
+                    '"trait_type":"Polygon Layer Count",',
+                    '"value":"', Strings.toString(uint(artAttributes.numOfPolygonGroups)),'"',
+                "},",
+                "{",
+                    '"trait_type":"Color Scheme",',
+                    '"value":"', colorScheme,'"',
+                "},",
+                "{",
+                    '"trait_type":"Root HSL",',
+                    '"value":"', HSLGenerator.toString(hsl),'"',
+                "}",
+            "]"
+        ));
 
         return string(
             abi.encodePacked(
@@ -152,9 +174,6 @@ contract AvatarForENS is ERC721 {
         // Assemble SVG
         return string(abi.encodePacked(
             "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>",
-                // "<metadata>",
-                //     "<numOfEdges>", Strings.toString(uint(artAttributes.numOfEdges)), "</numOfEdges>",
-                // "</metadata>",
                 "<defs>",
                     parentPolygon,
                     polygonGroups,

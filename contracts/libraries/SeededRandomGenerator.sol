@@ -13,7 +13,7 @@ library SeededRandomGenerator {
      * @param seed The seed to initialize the random number generator
      * @return hashOfSeed The hash of the seed
      */
-    function init(string memory seed) internal pure returns (bytes32 hashOfSeed) {
+    function init(string memory seed) external pure returns (bytes32 hashOfSeed) {
         hashOfSeed = keccak256(abi.encodePacked(seed));
     }
 
@@ -24,7 +24,7 @@ library SeededRandomGenerator {
      * @param max The maximum value of the random number
      * Returns the random integer and the new hash of the seed
      */
-    function randomInt(bytes32 currentHashOfSeed, int min, int max) internal pure returns (int randomNumber, bytes32 newHashOfSeed) {
+    function randomInt(bytes32 currentHashOfSeed, int min, int max) external pure returns (int randomNumber, bytes32 newHashOfSeed) {
         newHashOfSeed = keccak256(abi.encodePacked(currentHashOfSeed));
 
         randomNumber = int(uint(newHashOfSeed) % uint(max - min + 1)) + min;

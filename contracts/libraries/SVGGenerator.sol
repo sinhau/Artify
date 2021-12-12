@@ -51,7 +51,7 @@ library SVGGenerator {
      * @dev Generate pseudo-random SVG art attributes based on the given seed
      * Returns an ArtAttributes struct
      */
-    function generateArtAttributes(string memory seed) internal pure returns (ArtAttributes memory artAttributes, bytes32 newHashOfSeed) {
+    function generateArtAttributes(string memory seed) external pure returns (ArtAttributes memory artAttributes, bytes32 newHashOfSeed) {
         bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
 
         // Generate number of edges for the parent polygon
@@ -94,7 +94,7 @@ library SVGGenerator {
      * @param max Maximum coordinate value of a polygon vertex
      * Returns an SVG polygon element as a string
      */
-    function generatePolygon(bytes32 currentHashOfSeed, uint numOfEdges, string memory id, int min, int max) internal pure returns (string memory polygon, bytes32 newHashOfSeed) {
+    function generatePolygon(bytes32 currentHashOfSeed, uint numOfEdges, string memory id, int min, int max) external pure returns (string memory polygon, bytes32 newHashOfSeed) {
         // Generate all the vertices of the polygon
         string[] memory points = new string[](numOfEdges - 1);
         for (uint i = 0; i < numOfEdges - 1; i++) {
@@ -127,7 +127,7 @@ library SVGGenerator {
      * @param max Int representing max transform value in 2 sig figs (e.g. 65 = 0.65)
      * Returns a transform matrix as a string
      */
-    function generateMatrixTransform(bytes32 currentHashOfSeed, int min, int max) internal pure returns (string memory transformMatrix, bytes32 newHashOfSeed) {
+    function generateMatrixTransform(bytes32 currentHashOfSeed, int min, int max) private pure returns (string memory transformMatrix, bytes32 newHashOfSeed) {
         transformMatrix = "matrix(";
         for (uint i = 0; i < 6; i++) {
             int x;
@@ -148,7 +148,7 @@ library SVGGenerator {
      * @param maxY Max translate y value
      * Returns a translate transformation as a string
      */
-    function generateTranslate(bytes32 currentHashOfSeed, int minX, int maxX, int minY, int maxY) internal pure returns (string memory translate, bytes32 newHashOfSeed) {
+    function generateTranslate(bytes32 currentHashOfSeed, int minX, int maxX, int minY, int maxY) private pure returns (string memory translate, bytes32 newHashOfSeed) {
         int x;
         int y;
         (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minX, maxX);
@@ -167,7 +167,7 @@ library SVGGenerator {
      * @param dur Duration of the animation
      * Returns an animate SVG element as a string
      */
-    function generateAnimate(string memory attributeName, string memory values, int dur) internal pure returns (string memory animate) {
+    function generateAnimate(string memory attributeName, string memory values, int dur) private pure returns (string memory animate) {
         animate = string(abi.encodePacked(
             "<animate attributeName='", attributeName, "' values='", values, "' dur='", intToString(dur), "s' repeatCount='indefinite'/>"
         ));
@@ -178,7 +178,7 @@ library SVGGenerator {
      * @param input Input contaning AnimateTransformInputs type
      * Returns an animate SVG element as a string
      */
-    function generateAnimateTransform(AnimateTransformInputs memory input) internal pure returns (string memory animate) {
+    function generateAnimateTransform(AnimateTransformInputs memory input) private pure returns (string memory animate) {
         animate = string(abi.encodePacked(
             "<animateTransform attributeName='", input.attributeName, "' attributeType='", input.attributeType, "' type='", input.typeOfTransform, "' values='", input.values, "' dur='", intToString(input.dur), "s' repeatCount='indefinite' additive='sum'/>"
         ));
@@ -191,7 +191,7 @@ library SVGGenerator {
      * @param color HSL color for the polygon group
      * @param polygonIndex Index of the polygon in the group
      */
-    function generatePolygonGroup(bytes32 currentHashOfSeed, string memory id, HSL memory color, uint polygonIndex) internal pure returns (string memory polygonGroup, bytes32 newHashOfSeed) {
+    function generatePolygonGroup(bytes32 currentHashOfSeed, string memory id, HSL memory color, uint polygonIndex) external pure returns (string memory polygonGroup, bytes32 newHashOfSeed) {
         polygonGroup = string(abi.encodePacked("<use xlink:href='#", id, "' transform='"));
 
         // Generate transform matrix

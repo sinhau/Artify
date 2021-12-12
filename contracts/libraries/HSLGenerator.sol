@@ -15,7 +15,7 @@ library HSLGenerator {
      * @param colorScheme 1 represents triadic, 2 represents split_complimentary
      * Returns an array of HSL colors
      */
-    function generateHSLPalette(int colorScheme, int rootHue, int rootSaturation, int rootLightness) internal pure returns (HSL[3] memory HSLColors) {
+    function generateHSLPalette(int colorScheme, int rootHue, int rootSaturation, int rootLightness) external pure returns (HSL[3] memory HSLColors) {
         require(colorScheme == 1 || colorScheme == 2 || colorScheme == 3, "Invalid color scheme.  Only triadic, split_complimentary, and analogous are supported right now.");
         require(rootHue >= 0, "Invalid root hue.  Must be a positive number");
         require(rootSaturation > 0 && rootSaturation <= 100, "Invalid saturation.  Must be between 1 and 100.");
@@ -47,7 +47,7 @@ library HSLGenerator {
      * @dev Convert HSL color to string representation used in SVG XML
      * Returns a string representation of the HSL color
      */
-    function toString(HSL memory HSLColor) internal pure returns (string memory HSLColorString) {
+    function toString(HSL memory HSLColor) external pure returns (string memory HSLColorString) {
         HSLColorString = string(abi.encodePacked(
             "hsl(",
             Strings.toString(HSLColor.hue), ",",
