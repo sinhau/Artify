@@ -16,7 +16,7 @@ library HSLGenerator {
      * Returns an array of HSL colors
      */
     function generateHSLPalette(int colorScheme, int rootHue, int rootSaturation, int rootLightness) internal pure returns (HSL[3] memory HSLColors) {
-        require(colorScheme == 1 || colorScheme == 2, "Invalid color scheme.  Only triadic and split_complimentary are supported right now.");
+        require(colorScheme == 1 || colorScheme == 2 || colorScheme == 3, "Invalid color scheme.  Only triadic, split_complimentary, and analogous are supported right now.");
         require(rootHue >= 0, "Invalid root hue.  Must be a positive number");
         require(rootSaturation > 0 && rootSaturation <= 100, "Invalid saturation.  Must be between 1 and 100.");
         require(rootLightness > 0 && rootLightness <= 100, "Invalid lightness.  Must be between 1 and 100.");
@@ -34,8 +34,13 @@ library HSLGenerator {
             HSL memory thirdColor = HSL((uint(rootHue) + 210) % 360, uint(rootSaturation), uint(rootLightness));
 
             HSLColors = [firstColor, secondColor, thirdColor];
-        }
+        } else if (colorScheme == 3) { // analogous
+            HSL memory firstColor = HSL(uint(rootHue) % 360, uint(rootSaturation), uint(rootLightness));
+            HSL memory secondColor = HSL((uint(rootHue) + 30) % 360, uint(rootSaturation), uint(rootLightness));
+            HSL memory thirdColor = HSL((uint(rootHue) + 60) % 360, uint(rootSaturation), uint(rootLightness));
 
+            HSLColors = [firstColor, secondColor, thirdColor];
+        }
     }
 
     /**

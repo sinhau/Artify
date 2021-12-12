@@ -14,6 +14,7 @@ import "./libraries/SeededRandomGenerator.sol";
 import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
+import "./structs/ArtAttributes.sol";
 
 contract AvatarForENS is ERC721 {
     mapping (uint256 => string) private _tokenIDToSeed;
@@ -73,6 +74,21 @@ contract AvatarForENS is ERC721 {
     function generateTokenURI(string memory seed, uint tokenID) internal view returns (string memory) {
         string memory image = Base64.encode(bytes(_tokenArt[tokenID]));
 
+        // Get art attributes
+        ArtAttributes memory artAttributes;
+        (artAttributes, ) = SVGGenerator.generateArtAttributes(seed);
+
+        // Assemble attributes string
+        string memory attributes = "";
+        // attributes = string(abi.encodePacked(
+        //     "[",
+        //         "{",
+        //             '"trait_type":"Polygon Edge Count",',
+        //             '"value":"', Strings.toString(uint(artAttributes.numOfEdges)),'"',
+        //         "},",
+        //     "]"
+        // ));
+
         return string(
             abi.encodePacked(
                 'data:application/json;base64,',
@@ -81,7 +97,8 @@ contract AvatarForENS is ERC721 {
                         abi.encodePacked(
                             '{"name":"Avatar for ', seed, '",',
                             '"description":"Each avatar is a one of a kind on-chain generated SVG which is seeded by the ENS domain name or the wallet address of the minter.  This avatar was originally minted using the seed ', seed, '",',
-                            '"image":"data:image/svg+xml;base64,', image, '"}'
+                            '"image":"data:image/svg+xml;base64,', image, '",',
+                            '"attributes":', attributes, '}'
                         )
                     )
                 )
@@ -95,47 +112,34 @@ contract AvatarForENS is ERC721 {
      * Returns the SVG image as bytes
      */
     function generateArt(string memory seed) internal pure returns (string memory) {
-        bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
+        ArtAttributes memory artAttributes;
+        bytes32 hashOfSeed;
+        (artAttributes, hashOfSeed) = SVGGenerator.generateArtAttributes(seed);
 
         // Generate SVG element for the main polygon
         string memory parentPolygon;
         string memory parentPolygonID = "parentPolygon";
-        int numOfEdges;
-        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 6);
-        (parentPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(numOfEdges), parentPolygonID, -200, 200);
+        (parentPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(artAttributes.numOfEdges), parentPolygonID, -200, 200);
 
-        // Generate number of polygon groups to create
-        int numOfPolygonGroups;
-        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
+        // Generate HSL color pallete for all the polygon layers
+        HSL[] memory HSLColors = new HSL[](uint(artAttributes.numOfPolygonGroups));
 
-        // Get enough HSL colors for each polygon group
-        int colorScheme;
-        (colorScheme, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 1, 2);
-        int rootHue;
-        (rootHue, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 0, 359);
-        int rootSaturation;
-        (rootSaturation, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 80, 100);
-        int rootLightness;
-        (rootLightness, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 30, 50);
-
-        HSL[] memory HSLColors = new HSL[](uint(numOfPolygonGroups));
-
-        HSL[3] memory HSLColors1 = HSLGenerator.generateHSLPalette(colorScheme, rootHue, rootSaturation, rootLightness);
+        HSL[3] memory HSLColors1 = HSLGenerator.generateHSLPalette(artAttributes.colorScheme, artAttributes.rootHue, artAttributes.rootSaturation, artAttributes.rootLightness);
         HSLColors[0] = HSLColors1[0];
         HSLColors[1] = HSLColors1[1];
         HSLColors[2] = HSLColors1[2];
 
-        if (numOfPolygonGroups > 3) {
-            HSL[3] memory HSLColors2 = HSLGenerator.generateHSLPalette(colorScheme, int(HSLColors1[1].hue), rootSaturation, rootLightness);
-            for (uint i = 3; i < uint(numOfPolygonGroups); i++) {
-                HSLColors[i] = HSLColors2[i - 3];
+        if (artAttributes.numOfPolygonGroups > 3) {
+            HSL[3] memory HSLColors2 = HSLGenerator.generateHSLPalette(artAttributes.colorScheme, int(HSLColors1[1].hue), artAttributes.rootSaturation, artAttributes.rootLightness);
+            for (uint i = 3; i < uint(artAttributes.numOfPolygonGroups); i++) {
+                HSLColors[i] = HSLColors2[i - 2]; //NOTE: i-2 will only work when numOfPolygonGroups is 5 or less
             }
         }
 
         // Generate polygon groups
         string memory polygonGroups = "<g id='polygonGroups'>";
         string memory polygon;
-        for (uint i = 1; i <= uint(numOfPolygonGroups); i++) {
+        for (uint i = 1; i <= uint(artAttributes.numOfPolygonGroups); i++) {
             (polygon, hashOfSeed) = SVGGenerator.generatePolygonGroup(hashOfSeed, parentPolygonID, HSLColors[i-1], i);
             polygonGroups = string(abi.encodePacked(
                 polygonGroups,
@@ -148,6 +152,9 @@ contract AvatarForENS is ERC721 {
         // Assemble SVG
         return string(abi.encodePacked(
             "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>",
+                // "<metadata>",
+                //     "<numOfEdges>", Strings.toString(uint(artAttributes.numOfEdges)), "</numOfEdges>",
+                // "</metadata>",
                 "<defs>",
                     parentPolygon,
                     polygonGroups,

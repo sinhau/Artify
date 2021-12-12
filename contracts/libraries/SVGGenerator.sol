@@ -10,6 +10,7 @@ import "./SeededRandomGenerator.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./HSLGenerator.sol";
 import "../structs/AnimateTransformInputs.sol";
+import "../structs/ArtAttributes.sol";
 
 /**
  * @dev Utility functions for converting int to string
@@ -46,6 +47,44 @@ function intToStringDecimalTwoSigFigs(int x) pure returns (string memory decimal
 }
 
 library SVGGenerator {
+    /**
+     * @dev Generate pseudo-random SVG art attributes based on the given seed
+     * Returns an ArtAttributes struct
+     */
+    function generateArtAttributes(string memory seed) internal pure returns (ArtAttributes memory artAttributes, bytes32 newHashOfSeed) {
+        bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
+
+        // Generate number of edges for the parent polygon
+        int numOfEdges;
+        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 6);
+
+        // Generate number of polygon layers to use
+        int numOfPolygonGroups;
+        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
+
+        // Generate color scheme
+        int colorScheme;
+        (colorScheme, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 1, 3);
+
+        // Generate root HSL values
+        int rootHue;
+        (rootHue, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 0, 359);
+        int rootSaturation;
+        (rootSaturation, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 80, 100);
+        int rootLightness;
+        (rootLightness, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 30, 50);
+
+        artAttributes.numOfEdges = numOfEdges;
+        artAttributes.numOfPolygonGroups = numOfPolygonGroups;
+        artAttributes.colorScheme = colorScheme;
+        artAttributes.rootHue = rootHue;
+        artAttributes.rootSaturation = rootSaturation;
+        artAttributes.rootLightness = rootLightness;
+
+        newHashOfSeed = hashOfSeed;
+    }
+
+
     /**
      * @dev Generates an SVG polygon using the provided hash of seed
      * @param currentHashOfSeed The seed to use for generating the polygon
