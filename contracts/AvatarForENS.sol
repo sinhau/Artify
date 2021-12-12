@@ -13,7 +13,7 @@ import "base64-sol/base64.sol";
 import "./libraries/SeededRandomGenerator.sol";
 import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
-
+import "./structs/HSL.sol";
 
 contract AvatarForENS is ERC721 {
     mapping (uint256 => string) private _tokenIDToSeed;
@@ -97,164 +97,92 @@ contract AvatarForENS is ERC721 {
     function generateArt(string memory seed) internal pure returns (string memory) {
         bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
 
-        // Generate SVG elements for the initial polygons
-        string memory _mainPolygon;
+        // Generate SVG element for the main polygon
+        string memory parentPolygon;
+        string memory parentPolygonID = "parentPolygon";
         int numOfEdges;
-        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 10);
-        (_mainPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(numOfEdges), "poly", -100, 100);
+        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 6);
+        (parentPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(numOfEdges), parentPolygonID, -200, 200);
 
-        // Generate colors
-        string[4] memory _colors;
-        uint _seedModFactor;
-        (_colors, _seedModFactor) = generateColors(uint(hashOfSeed), 100000);
+        // Generate number of polygon groups to create
+        int numOfPolygonGroups;
+        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
+
+        // Get enough HSL colors for each polygon group
+        int colorScheme;
+        (colorScheme, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 1, 2);
+        int rootHue;
+        (rootHue, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 0, 359);
+        int rootSaturation;
+        (rootSaturation, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 80, 100);
+        int rootLightness;
+        (rootLightness, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 30, 50);
+
+        HSL[] memory HSLColors = new HSL[](uint(numOfPolygonGroups));
+
+        HSL[3] memory HSLColors1 = HSLGenerator.generateHSLPalette(colorScheme, rootHue, rootSaturation, rootLightness);
+        HSLColors[0] = HSLColors1[0];
+        HSLColors[1] = HSLColors1[1];
+        HSLColors[2] = HSLColors1[2];
+
+        if (numOfPolygonGroups > 3) {
+            HSL[3] memory HSLColors2 = HSLGenerator.generateHSLPalette(colorScheme, int(HSLColors1[1].hue), rootSaturation, rootLightness);
+            for (uint i = 3; i < uint(numOfPolygonGroups); i++) {
+                HSLColors[i] = HSLColors2[i - 3];
+            }
+        }
+
+        // Generate polygon groups
+        string memory polygonGroups = "<g id='polygonGroups'>";
+        string memory polygon;
+        for (uint i = 1; i <= uint(numOfPolygonGroups); i++) {
+            (polygon, hashOfSeed) = SVGGenerator.generatePolygonGroup(hashOfSeed, parentPolygonID, HSLColors[i-1], i);
+            polygonGroups = string(abi.encodePacked(
+                polygonGroups,
+                polygon
+            ));
+        }
+        polygonGroups = string(abi.encodePacked(polygonGroups, "</g>"));
+
 
         // Assemble SVG
         return string(abi.encodePacked(
             "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:#121212'>",
                 "<defs>",
-                    _mainPolygon,
-                    "<g id='poly_group'>",
-                        "<use xlink:href='#poly' transform='matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "'>",
-                            "<animate attributeName='opacity' values='1;0.3;1' dur='3s' repeatCount='indefinite'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;25;0;-25;0' dur='3s' repeatCount='indefinite' additive='sum'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;10;0;-10;0' dur='3s' repeatCount='indefinite' additive='sum'/>",
-                        "</use>",
-                        "<use xlink:href='#poly' transform='matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "'>",
-                            "<animate attributeName='opacity' values='1;0.3;1' dur='5s' repeatCount='indefinite'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;20;0;-20;0' dur='5s' repeatCount='indefinite' additive='sum'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;15;0;-15;0' dur='5s' repeatCount='indefinite' additive='sum'/>",
-                        "</use>",
-                        "<use xlink:href='#poly' transform='matrix(0.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "'>",
-                            "<animate attributeName='opacity' values='1;0.3;1' dur='7s' repeatCount='indefinite'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;15;0;-15;0' dur='7s' repeatCount='indefinite' additive='sum'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;20;0;-20;0' dur='7s' repeatCount='indefinite' additive='sum'/>",
-                        "</use>",
-                        "<use xlink:href='#poly' transform='matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "'>",
-                            "<animate attributeName='opacity' values='1;0.3;1' dur='9s' repeatCount='indefinite'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;10;0;-10;0' dur='9s' repeatCount='indefinite' additive='sum'/>",
-                            "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;25;0;-25;0' dur='9s' repeatCount='indefinite' additive='sum'/>",
-                        "</use>",
-                    "</g>",
+                    parentPolygon,
+                    polygonGroups,
+                    // "<g id='poly_group'>",
+                    //     "<use xlink:href='#poly' transform='matrix(0.77 0.81 -0.87 -0.33 0.86 0.84)' fill='", _colors[0], "'>",
+                    //         "<animate attributeName='opacity' values='1;0.3;1' dur='3s' repeatCount='indefinite'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;25;0;-25;0' dur='3s' repeatCount='indefinite' additive='sum'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;10;0;-10;0' dur='3s' repeatCount='indefinite' additive='sum'/>",
+                    //     "</use>",
+                    //     "<use xlink:href='#poly' transform='matrix(-0.81 0.41 0.65 0.26 0.3 -0.43) translate(40,0)' fill='", _colors[1], "'>",
+                    //         "<animate attributeName='opacity' values='1;0.3;1' dur='5s' repeatCount='indefinite'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;20;0;-20;0' dur='5s' repeatCount='indefinite' additive='sum'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;15;0;-15;0' dur='5s' repeatCount='indefinite' additive='sum'/>",
+                    //     "</use>",
+                    //     "<use xlink:href='#poly' transform='matrix(0.08 -0.36 -0.25 0.76 0.87 0.68) translate(0,40)' fill='", _colors[2], "'>",
+                    //         "<animate attributeName='opacity' values='1;0.3;1' dur='7s' repeatCount='indefinite'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;15;0;-15;0' dur='7s' repeatCount='indefinite' additive='sum'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;20;0;-20;0' dur='7s' repeatCount='indefinite' additive='sum'/>",
+                    //     "</use>",
+                    //     "<use xlink:href='#poly' transform='matrix(1.3 .2 .12 -0.23 -2.43 .13) translate(40,40)' fill='", _colors[3], "'>",
+                    //         "<animate attributeName='opacity' values='1;0.3;1' dur='9s' repeatCount='indefinite'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewX' values='0;10;0;-10;0' dur='9s' repeatCount='indefinite' additive='sum'/>",
+                    //         "<animateTransform attributeName='transform' attributeType='XML' type='skewY' values='0;25;0;-25;0' dur='9s' repeatCount='indefinite' additive='sum'/>",
+                    //     "</use>",
+                    // "</g>",
                 "</defs>",
-                "<rect width='100%' height='100%' />",
                 "<g>",
-                    "<use xlink:href='#poly_group' transform='translate(320, 320) rotate(0,0,0)'/>",
-                    "<use xlink:href='#poly_group' transform='translate(320, 320) rotate(60,0,0)' />",
-                    "<use xlink:href='#poly_group' transform='translate(320, 320) rotate(120,0,0)' />",
-                    "<use xlink:href='#poly_group' transform='translate(320, 320) rotate(180,0,0)' />",
-                    "<use xlink:href='#poly_group' transform='translate(320, 320) rotate(240,0,0)' />",
-                    "<use xlink:href='#poly_group' transform='translate(320, 320) rotate(300,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/>",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' />",
                     "<animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='30s' repeatCount='indefinite'/>",
                 "</g>",
             "</svg>"));
-    }
-
-    /**
-     * @dev Generate polyline element based on seed
-     *
-     * @param seed The seed to generate the polyline from
-     * @param seedModFactor The factor to mod the seed by
-     *
-     * Returns the SVG polyline element
-     */
-    function generatePolyline(uint seed, uint seedModFactor) internal pure returns (string memory, uint) {
-        seedModFactor += 1;
-        uint _numberOfSides = 6;
-
-        string memory _polyline = string(abi.encodePacked(
-            "polyline id='poly' points='0,0 "
-        ));
-
-        // Generate points for the polygon
-        for (uint i = 0; i < _numberOfSides-1; i++) {
-            string memory _point;
-            (_point, seedModFactor) = getPolygonPoint(seed, seedModFactor);
-            _polyline = string(abi.encodePacked(
-                _polyline,
-                _point,
-                " "
-            ));
-        }
-
-        // Close the polygon
-        _polyline = string(abi.encodePacked(
-            _polyline,
-            " 0,0'" 
-        ));
-
-        return (_polyline, seedModFactor);
-    }
-
-    /**
-     * @dev Get polygon point position based on seed
-     *
-     * @param seed The seed to generate the point from
-     * @param seedModFactor The factor to mod the seed by
-     *
-     * Returns the polygon point position as a string
-     */
-    function getPolygonPoint(uint seed, uint seedModFactor) internal pure returns (string memory, uint) {
-        // Get the polygon point (between -150 and 150)
-        seedModFactor += 1;
-        uint _polygonPointX = seed % seedModFactor % 300;
-
-        seedModFactor += 1;
-        uint _polygonPointY = seed % seedModFactor % 300;
-
-
-        // Get the polygon point position as string
-        string memory _polygonPoint = string(abi.encodePacked(
-            _polygonPointX <= 150 ? '-' : '',
-            Strings.toString(_polygonPointX/2),
-            ',',
-            _polygonPointY <= 150 ? '-' : '',
-            Strings.toString(_polygonPointY/2)
-        ));
-
-        return (_polygonPoint, seedModFactor);
-    }
-
-    /**
-     * @dev Generate array of RGB color bassed on seed.
-     *
-     * @param seed The seed to generate the SVG art from
-     * @param seedModFactor The factor to mod the seed by
-     *
-     * Returns the array RGB color strings
-     */
-    function generateColors(uint seed, uint seedModFactor) internal pure returns (string[4] memory, uint) {
-        string[4] memory _colors;
-
-        for (uint i = 0; i < 4; i++) {
-            string memory _rgb;
-            uint _polygonColorR;
-            uint _polygonColorG;
-            uint _polygonColorB;
-
-            // Get the polygon color (between 0 and 255)
-            seedModFactor += 1;
-            _polygonColorR = seed % seedModFactor % 256;
-
-            seedModFactor += 1;
-            _polygonColorG = seed % seedModFactor % 256;
-
-            seedModFactor += 1;
-            _polygonColorB = seed % seedModFactor % 256;
-
-            // Get the polygon color as string
-            _rgb = string(abi.encodePacked(
-                'rgb(',
-                Strings.toString(_polygonColorR),
-                ',',
-                Strings.toString(_polygonColorG),
-                ',',
-                Strings.toString(_polygonColorB),
-                ')'
-            ));
-
-            _colors[i] = _rgb;
-        }
-
-        return (_colors, seedModFactor);
     }
 }

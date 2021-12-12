@@ -1,11 +1,10 @@
 async function main() {
-  const AvatarForENsContractFactory = await ethers.getContractFactory(
+  // Deploy main contract
+  const AvatarForENSContractFactory = await ethers.getContractFactory(
     "AvatarForENS"
   );
-
-  // Start deployment, returning a promise that resolves to a contract object
-  const AvatarForENS = await AvatarForENsContractFactory.deploy();
-  console.log("Contract deployed to address:", AvatarForENS.address);
+  const AvatarForENS = await AvatarForENSContractFactory.deploy();
+  console.log("AvatarForENS deployed to address:", AvatarForENS.address);
 }
 
 main()

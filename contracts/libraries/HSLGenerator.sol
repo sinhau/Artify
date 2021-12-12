@@ -12,24 +12,26 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 library HSLGenerator {
     /**
      * @dev Generate full pallette of HSL colors based on given color scheme and root hue, saturation, and lightness
+     * @param colorScheme 1 represents triadic, 2 represents split_complimentary
      * Returns an array of HSL colors
      */
-    function generateHSLPalette(string memory colorScheme, uint rootHue, uint rootSaturation, uint rootLightness) public pure returns (HSL[3] memory HSLColors) {
-        require(keccak256(abi.encodePacked(colorScheme)) == keccak256(abi.encodePacked("triadic")) || keccak256(abi.encodePacked(colorScheme)) == keccak256(abi.encodePacked("split_complimentary")), "Invalid color scheme.  Only triadic and split_complimentary are supported right now.");
+    function generateHSLPalette(int colorScheme, int rootHue, int rootSaturation, int rootLightness) internal pure returns (HSL[3] memory HSLColors) {
+        require(colorScheme == 1 || colorScheme == 2, "Invalid color scheme.  Only triadic and split_complimentary are supported right now.");
+        require(rootHue >= 0, "Invalid root hue.  Must be a positive number");
         require(rootSaturation > 0 && rootSaturation <= 100, "Invalid saturation.  Must be between 1 and 100.");
         require(rootLightness > 0 && rootLightness <= 100, "Invalid lightness.  Must be between 1 and 100.");
 
 
-        if (keccak256(abi.encodePacked(colorScheme)) == keccak256(abi.encodePacked("triadic"))) {
-            HSL memory firstColor = HSL(rootHue % 360, rootSaturation, rootLightness);
-            HSL memory secondColor = HSL((rootHue + 120) % 360, rootSaturation, rootLightness);
-            HSL memory thirdColor = HSL((rootHue + 240) % 360, rootSaturation, rootLightness);
+        if (colorScheme == 1) { // triadic
+            HSL memory firstColor = HSL(uint(rootHue) % 360, uint(rootSaturation), uint(rootLightness));
+            HSL memory secondColor = HSL((uint(rootHue) + 120) % 360, uint(rootSaturation), uint(rootLightness));
+            HSL memory thirdColor = HSL((uint(rootHue) + 240) % 360, uint(rootSaturation), uint(rootLightness));
 
             HSLColors = [firstColor, secondColor, thirdColor];
-        } else if (keccak256(abi.encodePacked(colorScheme)) == keccak256(abi.encodePacked("split_complimentary"))) {
-            HSL memory firstColor = HSL(rootHue % 360, rootSaturation, rootLightness);
-            HSL memory secondColor = HSL((rootHue + 150) % 360, rootSaturation, rootLightness);
-            HSL memory thirdColor = HSL((rootHue + 210) % 360, rootSaturation, rootLightness);
+        } else if (colorScheme == 2) { // split_complimentary
+            HSL memory firstColor = HSL(uint(rootHue) % 360, uint(rootSaturation), uint(rootLightness));
+            HSL memory secondColor = HSL((uint(rootHue) + 150) % 360, uint(rootSaturation), uint(rootLightness));
+            HSL memory thirdColor = HSL((uint(rootHue) + 210) % 360, uint(rootSaturation), uint(rootLightness));
 
             HSLColors = [firstColor, secondColor, thirdColor];
         }
