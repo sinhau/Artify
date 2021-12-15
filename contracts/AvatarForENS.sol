@@ -8,6 +8,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "base64-sol/base64.sol";
 import "./libraries/HSLGenerator.sol";
@@ -15,8 +16,8 @@ import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
 
-contract AvatarForENS is ERC721 {
-    mapping (uint256 => string) private _tokenIDToSeed;
+contract AvatarForENS is ERC721, Ownable {
+    mapping (uint256 => string) private _tokenSeed;
     mapping (uint256 => string) private _tokenArt;
     uint256 private _tokenID;
     uint256 private constant _MINT_FEE = 10000000000000000;
@@ -36,12 +37,19 @@ contract AvatarForENS is ERC721 {
         _safeMint(minter, _tokenID);
         
         // Set the token's seed
-        _tokenIDToSeed[_tokenID] = ensName;
+        _tokenSeed[_tokenID] = ensName;
 
         // Generate token art
         _tokenArt[_tokenID] = generateArt(ensName);
 
         return _tokenID;
+    }
+
+    /**
+     * @dev Withdraw the full ether balance in the contract
+     */
+    function withdrawFullBalance() payable external onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
     }
 
     /**
@@ -51,7 +59,7 @@ contract AvatarForENS is ERC721 {
      */
     function tokenURI(uint256 tokenID) public view override returns (string memory)
     {
-        string memory seed = _tokenIDToSeed[tokenID];
+        string memory seed = _tokenSeed[tokenID];
         string memory _tokenURI = generateTokenURI(seed, tokenID);
         return _tokenURI;       
     }
@@ -72,7 +80,7 @@ contract AvatarForENS is ERC721 {
      * @dev Generates metadata for NFT based on token's seed
      * @param seed The seed of the NFT
      */
-    function generateTokenURI(string memory seed, uint tokenID) internal view returns (string memory) {
+    function generateTokenURI(string memory seed, uint tokenID) private view returns (string memory) {
         string memory image = Base64.encode(bytes(_tokenArt[tokenID]));
 
         // Get art attributes
@@ -135,7 +143,7 @@ contract AvatarForENS is ERC721 {
      * @param seed The seed to generate the SVG art from
      * Returns the SVG image as bytes
      */
-    function generateArt(string memory seed) internal pure returns (string memory) {
+    function generateArt(string memory seed) private pure returns (string memory) {
         ArtAttributes memory artAttributes;
         bytes32 hashOfSeed;
         (artAttributes, hashOfSeed) = SVGGenerator.generateArtAttributes(seed);

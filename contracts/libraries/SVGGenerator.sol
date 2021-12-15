@@ -12,40 +12,6 @@ import "./HSLGenerator.sol";
 import "../structs/AnimateTransformInputs.sol";
 import "../structs/ArtAttributes.sol";
 
-/**
- * @dev Utility functions for converting int to string
- * Returns string representation of int
- */
-function intToString(int x) pure returns (string memory) {
-    unchecked {
-        return string(abi.encodePacked(x < 0 ? "-": "", Strings.toString(uint(x >=0 ? x : -x))));
-    }
-}
-
-/**
- * @dev Utility functions that converts an int to a decimal with 2 significant digits
- * Returns string representation of decimal
- */
-function intToStringDecimalTwoSigFigs(int x) pure returns (string memory decimal) {
-    int whole = x / 100;
-        
-    int fractionInt = x % 100;
-    uint fraction = uint(fractionInt >=0 ? fractionInt : -fractionInt);
-    string memory fractionStr;
-    if (fraction < 10) {
-        fractionStr = string(abi.encodePacked("0",Strings.toString(fraction)));
-    } else {
-        fractionStr = Strings.toString(fraction);
-    }
-
-    decimal = string(abi.encodePacked(
-        (x >= -99 && x < 0) ? "-": "",
-        intToString(whole),
-        ".",
-        fractionStr
-    ));
-}
-
 library SVGGenerator {
     /**
      * @dev Generate pseudo-random SVG art attributes based on the given seed
@@ -264,5 +230,39 @@ library SVGGenerator {
         ));
 
         newHashOfSeed = currentHashOfSeed;
+    }
+
+    /**
+    * @dev Utility functions for converting int to string
+    * Returns string representation of int
+    */
+    function intToString(int x) private pure returns (string memory) {
+        unchecked {
+            return string(abi.encodePacked(x < 0 ? "-": "", Strings.toString(uint(x >=0 ? x : -x))));
+        }
+    }
+
+    /**
+    * @dev Utility functions that converts an int to a decimal with 2 significant digits
+    * Returns string representation of decimal
+    */
+    function intToStringDecimalTwoSigFigs(int x) private pure returns (string memory decimal) {
+        int whole = x / 100;
+            
+        int fractionInt = x % 100;
+        uint fraction = uint(fractionInt >=0 ? fractionInt : -fractionInt);
+        string memory fractionStr;
+        if (fraction < 10) {
+            fractionStr = string(abi.encodePacked("0",Strings.toString(fraction)));
+        } else {
+            fractionStr = Strings.toString(fraction);
+        }
+
+        decimal = string(abi.encodePacked(
+            (x >= -99 && x < 0) ? "-": "",
+            intToString(whole),
+            ".",
+            fractionStr
+        ));
     }
 }

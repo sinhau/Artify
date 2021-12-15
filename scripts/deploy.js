@@ -17,7 +17,7 @@ async function main() {
   // const HSLGeneratorContract = await HSLGeneratorContractFactory.deploy();
   // console.log("HSLGenerator deployed to", HSLGeneratorContract.address);
 
-  // Deploy SVGGenerator (already deployed at 0xDd29759B55E63789b1d830aEe9040078161aFb76)
+  // Deploy SVGGenerator (already deployed at 0x10D3264c2B257EB33Ee53C0A30f408ab6083C5cD)
   // const SVGGeneratorContractFactory = await ethers.getContractFactory(
   //   "SVGGenerator",
   //   {
@@ -36,7 +36,7 @@ async function main() {
     {
       libraries: {
         HSLGenerator: "0x150f9BA13F65C391207A832fA3d487B6D5f262e6",
-        SVGGenerator: "0xDd29759B55E63789b1d830aEe9040078161aFb76",
+        SVGGenerator: "0x10D3264c2B257EB33Ee53C0A30f408ab6083C5cD",
       },
     }
   );
