@@ -19,6 +19,7 @@ async function mintNFT(ensName) {
   const tx = {
     from: PUBLIC_KEY,
     to: CONTRACT_ADDRESS,
+    value: 10000000000000000,
     nonce: nonce,
     gas: 15000000,
     data: nftContract.methods.mintNFT(PUBLIC_KEY, ensName).encodeABI(),
@@ -27,9 +28,8 @@ async function mintNFT(ensName) {
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
     .then((signedTx) => {
-      web3.eth.sendSignedTransaction(
-        signedTx.rawTransaction,
-        function (err, hash) {
+      web3.eth
+        .sendSignedTransaction(signedTx.rawTransaction, function (err, hash) {
           if (!err) {
             console.log(
               "The hash of your transaction is: ",
@@ -42,15 +42,14 @@ async function mintNFT(ensName) {
               err
             );
           }
-        }
-      ).then(() => {
-        console.log("Minted NFT");
-      });
+        })
+        .then(() => {
+          console.log("Minted NFT");
+        });
     })
     .catch((err) => {
       console.log(" Promise failed:", err);
     });
-
 }
 
 var ensName = process.argv[2];

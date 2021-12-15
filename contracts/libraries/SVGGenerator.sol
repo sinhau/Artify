@@ -97,9 +97,9 @@ library SVGGenerator {
     function generatePolygon(bytes32 currentHashOfSeed, uint numOfEdges, string memory id, int min, int max) external pure returns (string memory polygon, bytes32 newHashOfSeed) {
         // Generate all the vertices of the polygon
         string[] memory points = new string[](numOfEdges - 1);
+        int x;
+        int y;
         for (uint i = 0; i < numOfEdges - 1; i++) {
-            int x;
-            int y;
             (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
             (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
             points[i] = string(abi.encodePacked(intToString(x), ",", intToString(y)));
@@ -129,8 +129,8 @@ library SVGGenerator {
      */
     function generateMatrixTransform(bytes32 currentHashOfSeed, int min, int max) private pure returns (string memory transformMatrix, bytes32 newHashOfSeed) {
         transformMatrix = "matrix(";
+        int x;
         for (uint i = 0; i < 6; i++) {
-            int x;
             (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
             transformMatrix = string(abi.encodePacked(transformMatrix, intToStringDecimalTwoSigFigs(x), (i == 5) ? "": " "));
         }

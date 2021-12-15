@@ -19,6 +19,7 @@ contract AvatarForENS is ERC721 {
     mapping (uint256 => string) private _tokenIDToSeed;
     mapping (uint256 => string) private _tokenArt;
     uint256 private _tokenID;
+    uint256 private constant _MINT_FEE = 10000000000000000;
 
     constructor() public ERC721("AvatarForENS", "ENSAVATAR") {}
 
@@ -27,8 +28,9 @@ contract AvatarForENS is ERC721 {
      *
      * Returns the token ID of the newly minted NFT.
      */
-    function mintNFT(address minter, string calldata ensName) external returns (uint256)
+    function mintNFT(address minter, string calldata ensName) external payable returns (uint256)
     {
+        require(msg.value >= _MINT_FEE, "Not enough ETH to mint");
         // Mint the token
         _tokenID += 1;
         _safeMint(minter, _tokenID);
