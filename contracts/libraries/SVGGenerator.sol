@@ -237,7 +237,7 @@ library SVGGenerator {
      * @param polygonIndex Index of the polygon in the group
      */
     function generatePolygonGroup(bytes32 currentHashOfSeed, string memory id, HSL memory color, uint polygonIndex) external pure returns (string memory polygonGroup, bytes32 newHashOfSeed) {
-        polygonGroup = string(abi.encodePacked("<use xlink:href='#", id, "' transform='"));
+        polygonGroup = string(abi.encodePacked("<use xlink:href='#", id, "' "));
 
         // Generate transform matrix
         if (polygonIndex != 1) {
@@ -245,7 +245,7 @@ library SVGGenerator {
             (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -100, 100);
 
             polygonGroup = string(abi.encodePacked(
-                polygonGroup, transformMatrix, "' "
+                polygonGroup, "transform='", transformMatrix, "' "
             ));
         }
         polygonGroup = string(abi.encodePacked(
