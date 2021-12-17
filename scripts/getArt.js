@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const RINKEBY_API_URL = process.env.RINKEBY_API_URL;
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
+const CONTRACT_ADDRESS = process.env.ARTIFY_CONTRACT_ADDRESS;
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const web3 = createAlchemyWeb3(RINKEBY_API_URL);
 

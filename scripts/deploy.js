@@ -1,29 +1,30 @@
-const { ethers } = require("ethers");
+const { ethers } = require("hardhat");
+require("dotenv").config();
 
 const _LIBRARIES = {
 	"StringConversions": {
-		"address": "0x86e4968eA75F2f95bcf3Cc75533fC294922DA07d",
-		"redeploy": false,
+		"address": process.env.STRINGS_CONVERSION_LIBRARY_ADDRESS,
+		"deploy": false,
 	},
 	"SeededRandomGenerator": {
-		"address": "0x6ff746e3D9cBBF1D80AeD726d35348935DC2DC91",
-		"redeploy": false,
+		"address": process.env.SEEDED_RANDOM_GENERATOR_LIBRARY_ADDRESS,
+		"deploy": false,
 	},
 	"HSLGenerator": {
-		"address": "0x7e1D9928faFb907009cd6Db31bae488c0123b63C",
-		"redeploy": false,
+		"address": process.env.HSL_GENERATOR_LIBRARY_ADDRESS,
+		"deploy": false,
 	},
 	"SVGGenerator": {
-		"address": "0x7Dc10d1C214Fbd36F454ec5e39833BcA142614D8",
-		"redeploy": true,
+		"address": process.env.SVG_GENERATOR_LIBRARY_ADDRESS,
+		"deploy": true,
 	},
 }
 
 async function deployContract() {
   // Deploy libraries
   for (key in _LIBRARIES) {
-    if (_LIBRARIES[key]["redeploy"]) {
-      console.log("Deploying library: ", key);
+    if (_LIBRARIES[key]["deploy"]) {
+      console.log("---\nDeploying library: ", key);
 
       var libraryContractFactory;
       if (key == "SVGGenerator") {
@@ -49,7 +50,7 @@ async function deployContract() {
   }
 
   // Deploy main contract
-  console.log("Deploying main contract");
+  console.log("---\nDeploying main contract");
 
   const contractFactory = await ethers.getContractFactory(
     "Artify",
@@ -63,7 +64,7 @@ async function deployContract() {
   );
   const contract = await contractFactory.deploy();
 
-  console.log("Contract deployed at: ", contract.address);
+  console.log("Contract deployed at: ", contract.address, "\n");
 }
 
 deployContract()

@@ -1,1 +1,48 @@
-<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'><defs><path id='parentPolygon' d='M 0 0 C 8 39, -52 62, -14 -35 S 41 0, -35 -44 S 59 51, 0 0' stroke='hsl(0,0%,40%)' /><g id='polygonGroups'><use xlink:href='#parentPolygon' transform='matrix(0.25 0.97 -0.81 0.33 -0.67 0.54)' fill='hsl(51,96%,35%)' ><animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;100;0;' dur='16s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.41 0.51 0.15 -0.98 -0.07 0.12)' fill='hsl(201,96%,35%)' ><animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;197;0;' dur='10s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(0.35 0.90 -0.27 0.07 0.02 -0.44)' fill='hsl(261,96%,35%)' ><animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;130;0;' dur='12s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.80 -0.59 -0.76 0.48 0.80 0.61)' fill='hsl(351,96%,35%)' ><animate attributeName='opacity' values='1;0.3;1' dur='8s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;154;0;' dur='24s' repeatCount='indefinite' additive='sum'/></use></g></defs><rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/><g><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' /><animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/></g></svg>
+<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg'
+    xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>
+    <metadata>
+        <message>testing first message - 0xdd175a204142040850211b529dcb9af6ee743e1b</message>
+        <contract>Artify: Permanently memorialize and a message, quote, or any other text-based input on the blockchain.
+            Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your
+            friends, family, and the world. Created by karsh.eth</contract>
+    </metadata>
+    <defs>
+        <filter id='blendSoft'>
+            <feGaussianBlur in='SourceGraphic' stdDeviation='5' />
+        </filter>
+        <filter id='blendHard'>
+            <feGaussianBlur in='SourceGraphic' stdDeviation='1' />
+        </filter>
+        <path id='parentPolygon' d='M 0 0 C 55 29, -52 -8, -17 34 S 12 19, 0 0' stroke='hsl(0,0%,40%)' />
+        <g id='polygonGroups'>
+            <use xlink:href='#parentPolygon' fill='hsl(284,93%,41%)' filter='url(#blendHard)'>
+                <animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;236;0;'
+                    dur='21s' repeatCount='indefinite' additive='sum' />
+            </use>
+            <use xlink:href='#parentPolygon' transform='matrix(0.90 -0.30 -0.13 -0.24 -0.18 -0.37)'
+                fill='hsl(44,93%,41%)' filter='url(#blendSoft)'>
+                <animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;145;0;'
+                    dur='29s' repeatCount='indefinite' additive='sum' />
+            </use>
+            <use xlink:href='#parentPolygon' transform='matrix(-0.42 0.70 0.98 0.03 0.53 -0.11)' fill='hsl(164,93%,41%)'
+                filter='url(#blendHard)'>
+                <animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;142;0;'
+                    dur='20s' repeatCount='indefinite' additive='sum' />
+            </use>
+        </g>
+    </defs>
+    <rect width='100%' height='100%' fill='hsl(0, 100%, 0%)' />
+    <g>
+        <use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)' />
+        <use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' />
+        <use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' />
+        <use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' />
+        <use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' />
+        <use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' />
+        <animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320'
+            dur='20s' repeatCount='indefinite' />
+    </g>
+</svg>

@@ -68,10 +68,10 @@ contract Artify is ERC721, Ownable {
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name":"Artsy Messages",',
-                            '"description":"On-chain generated SVG art encoding a secret message from the minter",',
+                            '{"name":"Artify",',
+                            '"description":"Permanently memorialize a message, quote, or any other text-based input on the blockchain.  Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your friends, family, and the world.  Artify also allows you to gift your artwork to a friend or family member during the minting process. So if you wanna send that someone special a gift with a special message, Artify is the way to go! Art generated using Artify is permanently stored on the Ethereum blockchain, with no other server dependencies.",',
                             '"image":"data:image/svg+xml;base64,', contractImage, '",',
-                            '"external_link": "https://artsy.messages"}'
+                            '"external_link": "https://artify.xyz"}'
                         )
                     )
                 )
@@ -167,7 +167,7 @@ contract Artify is ERC721, Ownable {
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name":"Artsy Message #', Strings.toString(tokenID), '",',
+                            '{"name":"Artify #', Strings.toString(tokenID), '",',
                             '"description":"', seed, '",',
                             '"image":"data:image/svg+xml;base64,', image, '",',
                             '"attributes":', attributes, '}'
@@ -229,10 +229,12 @@ contract Artify is ERC721, Ownable {
                         seed,
                     "</message>",
                     "<contract>",
-                        "Artsy Messages: On-chain generated SVG art encoding a message from the minter. Created by 0xdd175a204142040850211b529dcb9af6ee743e1b"
+                        "Artify: Permanently memorialize a message, quote, or any other text-based input on the blockchain.  Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your friends, family, and the world. Created by karsh.eth"
                     "</contract>",
                 "</metadata>",
                 "<defs>",
+                    "<filter id='blendSoft'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter>",
+                    "<filter id='blendHard'><feGaussianBlur in='SourceGraphic' stdDeviation='1' /></filter>",
                     parentPolygon,
                     polygonGroups,
                 "</defs>",
