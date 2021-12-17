@@ -22,7 +22,7 @@ library SVGGenerator {
 
         // Generate number of edges for the parent polygon
         int numOfEdges;
-        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
+        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 1, 3);
 
         // Generate number of polygon layers to use
         int numOfPolygonGroups;
