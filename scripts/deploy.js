@@ -1,31 +1,38 @@
 async function main() {
-  // Deploy SeededRandomGenerator (already deployed at 0x241340e863ae394dDE6cd873960512FBA284fc7E)
-  const SeededRandomGeneratorContractFactory = await ethers.getContractFactory(
-    "SeededRandomGenerator"
-  );
-  const SeededRandomGeneratorContract =
-    await SeededRandomGeneratorContractFactory.deploy();
-  console.log(
-    "SeededRandomGenerator deployed to",
-    SeededRandomGeneratorContract.address
-  );
+  // Deploy BokkyPooBahsDateTimeLibrary (ONLY FOR RINKEBY deployed at 0xD8E02bB2CD8637aAFB95578f91F1a981d7b0Da48, USE PRE_DEPLOYED LIBRARY FOR MAINNET)
+  // const DateTimeLibraryContractFactory = await ethers.getContractFactory(
+  //   "BokkyPooBahsDateTimeLibrary"
+  // );
+  // const DateTimeLibrary = await DateTimeLibraryContractFactory.deploy();
+  // console.log("DateTimeLibrary deployed to", DateTimeLibrary.address);
 
-  // Deploy HSLGenerator (Already deployed at 0x150f9BA13F65C391207A832fA3d487B6D5f262e6)
-  const HSLGeneratorContractFactory = await ethers.getContractFactory(
-    "HSLGenerator"
-  );
-  const HSLGeneratorContract = await HSLGeneratorContractFactory.deploy();
-  console.log("HSLGenerator deployed to", HSLGeneratorContract.address);
+  // Deploy SeededRandomGenerator (already deployed at 0x6ff746e3D9cBBF1D80AeD726d35348935DC2DC91)
+  // const SeededRandomGeneratorContractFactory = await ethers.getContractFactory(
+  //   "SeededRandomGenerator"
+  // );
+  // const SeededRandomGeneratorContract =
+  //   await SeededRandomGeneratorContractFactory.deploy();
+  // console.log(
+  //   "SeededRandomGenerator deployed to",
+  //   SeededRandomGeneratorContract.address
+  // );
 
-  // Deploy SVGGenerator (already deployed at 0x10D3264c2B257EB33Ee53C0A30f408ab6083C5cD)
+  // Deploy HSLGenerator (Already deployed at 0x7e1D9928faFb907009cd6Db31bae488c0123b63C)
+  // const HSLGeneratorContractFactory = await ethers.getContractFactory(
+  //   "HSLGenerator"
+  // );
+  // const HSLGeneratorContract = await HSLGeneratorContractFactory.deploy();
+  // console.log("HSLGenerator deployed to", HSLGeneratorContract.address);
+
+  // Deploy SVGGenerator (already deployed at 0xCFf96F71d1DA411B7D56f4EB2173e0bC30bC6812)
   const SVGGeneratorContractFactory = await ethers.getContractFactory(
     "SVGGenerator",
     {
       libraries: {
-        SeededRandomGenerator: SeededRandomGeneratorContract.address,
-        HSLGenerator: HSLGeneratorContract.address,
-        // SeededRandomGenerator: "0x241340e863ae394dDE6cd873960512FBA284fc7E",
-        // HSLGenerator: "0x150f9BA13F65C391207A832fA3d487B6D5f262e6"
+        // SeededRandomGenerator: SeededRandomGeneratorContract.address,
+        // HSLGenerator: HSLGeneratorContract.address,
+        SeededRandomGenerator: "0x6ff746e3D9cBBF1D80AeD726d35348935DC2DC91",
+        HSLGenerator: "0x7e1D9928faFb907009cd6Db31bae488c0123b63C",
       },
     }
   );
@@ -37,10 +44,13 @@ async function main() {
     "AvatarForENS",
     {
       libraries: {
-        HSLGenerator: HSLGeneratorContract.address,
+        // HSLGenerator: HSLGeneratorContract.address,
         SVGGenerator: SVGGeneratorContract.address,
-        // HSLGenerator: "0x150f9BA13F65C391207A832fA3d487B6D5f262e6",
-        // SVGGenerator: "0x10D3264c2B257EB33Ee53C0A30f408ab6083C5cD",
+        HSLGenerator: "0x7e1D9928faFb907009cd6Db31bae488c0123b63C",
+        // SVGGenerator: "0xCFf96F71d1DA411B7D56f4EB2173e0bC30bC6812",
+        // BokkyPooBahsDateTimeLibrary: DateTimeLibrary.address,
+        BokkyPooBahsDateTimeLibrary:
+          "0xD8E02bB2CD8637aAFB95578f91F1a981d7b0Da48",
       },
     }
   );

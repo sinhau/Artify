@@ -3,6 +3,7 @@ require("dotenv").config();
 const RINKEBY_API_URL = process.env.RINKEBY_API_URL;
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
+const { stripZeros } = require("ethers/lib/utils");
 const web3 = createAlchemyWeb3(RINKEBY_API_URL);
 
 const contract = require("../artifacts/contracts/AvatarForENS.sol/AvatarForENS.json");
@@ -12,7 +13,7 @@ const nftContract = new web3.eth.Contract(contract.abi, CONTRACT_ADDRESS);
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
-async function mintNFT(ensName) {
+async function mintNFT(seed) {
   const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest"); //get latest nonce
 
   //the transaction
@@ -22,9 +23,10 @@ async function mintNFT(ensName) {
     value: 10000000000000000,
     nonce: nonce,
     gas: 15000000,
-    data: nftContract.methods.mintNFT(PUBLIC_KEY, ensName).encodeABI(),
+    data: nftContract.methods.mintNFT(PUBLIC_KEY, seed).encodeABI(),
   };
 
+  console.log("Minting NFT for: ", seed);
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
     .then((signedTx) => {
@@ -44,7 +46,7 @@ async function mintNFT(ensName) {
           }
         })
         .then(() => {
-          console.log("Minted NFT");
+          console.log("Minted NFT for", seed);
         });
     })
     .catch((err) => {
@@ -52,6 +54,5 @@ async function mintNFT(ensName) {
     });
 }
 
-var ensName = process.argv[2];
-console.log("Minting NFT for: ", ensName);
-mintNFT(ensName);
+var seed = process.argv[2];
+mintNFT(seed);

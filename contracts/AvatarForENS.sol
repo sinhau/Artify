@@ -14,6 +14,7 @@ import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
+import "./libraries/BokkyPooBahsDateTimeLibrary.sol";
 
 contract AvatarForENS is ERC721, Ownable {
     mapping (uint256 => string) private _tokenSeed;
@@ -31,17 +32,51 @@ contract AvatarForENS is ERC721, Ownable {
     function mintNFT(address minter, string calldata ensName) external payable returns (uint256)
     {
         require(msg.value >= _MINT_FEE, "Not enough ETH to mint");
+
+        bytes memory seedBytes = bytes(ensName);
+        require(seedBytes.length > 0, "Token seed is empty");
+
+        string memory seed;
+        string memory currentDateTime = getCurrentDateTime();
+        seed = string(abi.encodePacked(
+            ensName,
+            " minted on ",
+            currentDateTime, " GMT"
+        ));
+
         // Mint the token
         _tokenID += 1;
         _safeMint(minter, _tokenID);
         
         // Set the token's seed
-        _tokenSeed[_tokenID] = ensName;
+        _tokenSeed[_tokenID] = seed;
 
         // Generate token art
-        _tokenArt[_tokenID] = generateArt(ensName);
+        _tokenArt[_tokenID] = generateArt(seed);
 
         return _tokenID;
+    }
+
+    function getCurrentDateTime() private view returns (string memory datetime) {
+        (uint year, uint month, uint day, uint hour, uint minute, uint second) = BokkyPooBahsDateTimeLibrary.timestampToDateTime(block.timestamp);
+        
+        string memory hourStr = string(abi.encodePacked(
+            (hour < 10) ? "0" : "",
+            Strings.toString(hour)
+        ));
+        string memory minuteStr = string(abi.encodePacked(
+            (minute < 10) ? "0" : "",
+            Strings.toString(minute)
+        ));
+        string memory secondStr = string(abi.encodePacked(
+            (second < 10) ? "0" : "",
+            Strings.toString(second)
+        ));
+
+        datetime = string(abi.encodePacked(
+            Strings.toString(year),"-",Strings.toString(month),"-",Strings.toString(day)," ",
+            hourStr,":",minuteStr,":",secondStr
+        ));
     }
 
     /**
@@ -59,6 +94,9 @@ contract AvatarForENS is ERC721, Ownable {
     function tokenURI(uint256 tokenID) public view override returns (string memory)
     {
         string memory seed = _tokenSeed[tokenID];
+        bytes memory seedBytes = bytes(seed);
+        require(seedBytes.length > 0, "TokenID not created yet");
+
         string memory _tokenURI = generateTokenURI(seed, tokenID);
         return _tokenURI;       
     }
@@ -72,6 +110,10 @@ contract AvatarForENS is ERC721, Ownable {
      */
     function getArt(uint256 tokenID) external view returns (string memory)
     {
+        string memory seed = _tokenSeed[tokenID];
+        bytes memory seedBytes = bytes(seed);
+        require(seedBytes.length > 0, "TokenID not created yet");
+
         return _tokenArt[tokenID];
     }
 
@@ -102,11 +144,11 @@ contract AvatarForENS is ERC721, Ownable {
         attributes = string(abi.encodePacked(
             "[",
                 "{",
-                    '"trait_type":"Polygon Edge Count",',
+                    '"trait_type":"Bezier Curve Count",',
                     '"value":"', Strings.toString(uint(artAttributes.numOfEdges)),'"',
                 "},",
                 "{",
-                    '"trait_type":"Polygon Layer Count",',
+                    '"trait_type":"Layer Count",',
                     '"value":"', Strings.toString(uint(artAttributes.numOfPolygonGroups)),'"',
                 "},",
                 "{",
@@ -127,7 +169,7 @@ contract AvatarForENS is ERC721, Ownable {
                     bytes(
                         abi.encodePacked(
                             '{"name":"Avatar for ', seed, '",',
-                            '"description":"Each avatar is a one of a kind on-chain generated SVG which is seeded by the ENS domain name or the wallet address of the minter.  This avatar was originally minted using the seed ', seed, '",',
+                            '"description":"Each avatar is a one of a kind on-chain generated SVG which is seeded by the combined hash of the minters ENS domain/wallet address and the current block timestamp.  This avatar was minted using the seed ', seed, '",',
                             '"image":"data:image/svg+xml;base64,', image, '",',
                             '"attributes":', attributes, '}'
                         )
@@ -150,7 +192,7 @@ contract AvatarForENS is ERC721, Ownable {
         // Generate SVG element for the main polygon
         string memory parentPolygon;
         string memory parentPolygonID = "parentPolygon";
-        (parentPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(artAttributes.numOfEdges), parentPolygonID, -200, 200);
+        (parentPolygon, hashOfSeed) = SVGGenerator.generatePath(hashOfSeed, uint(artAttributes.numOfEdges), parentPolygonID, -80, 80);
 
         // Generate HSL color pallete for all the polygon layers
         HSL[] memory HSLColors = new HSL[](uint(artAttributes.numOfPolygonGroups));
@@ -195,7 +237,7 @@ contract AvatarForENS is ERC721, Ownable {
                     "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' />",
                     "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' />",
                     "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' />",
-                    "<animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='30s' repeatCount='indefinite'/>",
+                    "<animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/>",
                 "</g>",
             "</svg>"));
     }

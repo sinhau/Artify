@@ -17,11 +17,13 @@ async function getTokenURI(tokenID) {
   const resp = await nftContract.methods.tokenURI(tokenID).call();
   const json = Buffer.from(resp.substring(29), "base64").toString();
   const result = JSON.parse(json);
-  console.log(result);
+  console.log("Name: ", result.name)
+  console.log("Description: ", result.description)
+  console.log("Attributes: ", result.attributes);
   const image = Buffer.from(result.image.substring(25), "base64").toString();
   console.log(image);
 }
 
 var tokenID = process.argv[2];
-console.log('TokenID used is: ', tokenID);
+console.log("TokenID used is: ", tokenID);
 getTokenURI(tokenID);

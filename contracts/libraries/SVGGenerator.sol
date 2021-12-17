@@ -22,11 +22,11 @@ library SVGGenerator {
 
         // Generate number of edges for the parent polygon
         int numOfEdges;
-        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 6);
+        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
 
         // Generate number of polygon layers to use
         int numOfPolygonGroups;
-        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
+        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 4);
 
         // Generate color scheme
         int colorScheme;
@@ -48,6 +48,75 @@ library SVGGenerator {
         artAttributes.rootLightness = rootLightness;
 
         newHashOfSeed = hashOfSeed;
+    }
+
+    /**
+     * @dev Generates an SVG path element using the provided hash of seed
+     * @param currentHashOfSeed The seed to use for generating the polygon
+     * @param numOfCurves Number of curves to use
+     * @param id ID of the polygon element
+     * @param min Minimum coordinate value of a control point vertex
+     * @param max Maximum coordinate value of a control point vertex
+     * Returns an SVG polygon element as a string
+     */
+    function generatePath(bytes32 currentHashOfSeed, uint numOfCurves, string memory id, int min, int max) external pure returns (string memory path, bytes32 newHashOfSeed) {
+        path = string(abi.encodePacked(
+            "<path id='", id, "' d='M 0 0 "
+        ));
+
+        int x;
+        int y;
+        for (uint i = 0; i < numOfCurves; i++) {
+            if (i == 0) {
+                (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                path = string(abi.encodePacked(
+                    path,
+                    "C ", intToString(x), " ", intToString(y), ", "
+                ));
+
+                (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                path = string(abi.encodePacked(
+                    path,
+                    intToString(x), " ", intToString(y), ", "
+                ));
+
+                (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                path = string(abi.encodePacked(
+                    path,
+                    intToString(x), " ", intToString(y), " "
+                ));
+            } else {
+                (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                path = string(abi.encodePacked(
+                    path,
+                    "S ", intToString(x), " ", intToString(y), ", "
+                ));
+
+                (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                path = string(abi.encodePacked(
+                    path,
+                    intToString(x), " ", intToString(y), " "
+                ));
+            }
+        }
+        (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+        (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+        path = string(abi.encodePacked(
+            path,
+            "S ", intToString(x), " ", intToString(y), ", "
+        ));
+        path = string(abi.encodePacked(
+            path,
+            "0 0' stroke='hsl(0,0%,40%)' />"
+        ));
+
+        // Update the hash of the seed
+        newHashOfSeed = currentHashOfSeed;
     }
 
 
@@ -162,7 +231,7 @@ library SVGGenerator {
 
         // Generate transform matrix
         string memory transformMatrix;
-        (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -100, 100);
+        (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -200, 200);
 
         // Generate translate transformation
         string memory translate;
@@ -181,23 +250,23 @@ library SVGGenerator {
         // Generate animations
         string memory animate = generateAnimate("opacity", "1;0.3;1", 2 * int(polygonIndex));
 
-        int skewFactor;
-        (skewFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 7, 12);
-        int dur = 2 * int(polygonIndex);
+        int translateFactor;
+        (translateFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 50,80);
+        int dur = 5 * int(polygonIndex);
 
         string memory animateTransformX;
         string memory animateTransformXValues;
         animateTransformXValues = string(abi.encodePacked(
             "0;",
-            intToString(skewFactor * int(polygonIndex)),";",
+            intToString(translateFactor),";",
             "0;",
-            intToString(-skewFactor * int(polygonIndex)),";",
+            intToString(-translateFactor),";",
             "0"
         ));
         AnimateTransformInputs memory input = AnimateTransformInputs(
             "transform",
             "XML",
-            "skewX",
+            "translateX",
             animateTransformXValues,
             dur
         );
@@ -205,17 +274,18 @@ library SVGGenerator {
 
         string memory animateTransformY;
         string memory animateTransformYValues;
+        dur = dur + 5;
         animateTransformYValues = string(abi.encodePacked(
             "0;",
-            intToString(-skewFactor * int(polygonIndex)),";",
+            intToString(-translateFactor),";",
             "0;",
-            intToString(skewFactor * int(polygonIndex)),";",
+            intToString(translateFactor),";",
             "0"
         ));
         input = AnimateTransformInputs(
             "transform",
             "XML",
-            "skewY",
+            "translateY",
             animateTransformYValues,
             dur
         );
