@@ -16,13 +16,13 @@ import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
 import "./libraries/StringConversions.sol";
 
-contract ArtsyMessages is ERC721, Ownable {
+contract Artify is ERC721, Ownable {
     mapping (uint256 => string) private _tokenSeed;
     mapping (uint256 => string) private _tokenArt;
     uint256 private _tokenID;
     uint256 private constant _MINT_FEE = 10000000000000000;
 
-    constructor() public ERC721("ArtsyMessages", "MESSAGEART") {}
+    constructor() public ERC721("Artify", "ARTIFY") {}
 
     /**
      * @dev Mints a new NFT token.
