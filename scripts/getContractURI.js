@@ -13,17 +13,13 @@ const nftContract = new web3.eth.Contract(contract.abi, CONTRACT_ADDRESS);
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
-async function getTokenURI(tokenID) {
-  const resp = await nftContract.methods.tokenURI(tokenID).call();
+async function getContractURI() {
+  const resp = await nftContract.methods.contractURI().call();
   const json = Buffer.from(resp.substring(29), "base64").toString();
   const result = JSON.parse(json);
-  console.log("Name: ", result.name)
-  console.log("Description: ", result.description)
-  console.log("Attributes: ", result.attributes);
+  console.log(result);
   const image = Buffer.from(result.image.substring(25), "base64").toString();
   console.log(image);
 }
 
-var tokenID = process.argv[2];
-console.log("TokenID used is: ", tokenID);
-getTokenURI(tokenID);
+getContractURI();

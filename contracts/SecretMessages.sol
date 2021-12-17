@@ -14,34 +14,34 @@ import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
-import "./libraries/BokkyPooBahsDateTimeLibrary.sol";
+import "./libraries/StringConversions.sol";
 
-contract AvatarForENS is ERC721, Ownable {
+contract SecretMessages is ERC721, Ownable {
     mapping (uint256 => string) private _tokenSeed;
     mapping (uint256 => string) private _tokenArt;
     uint256 private _tokenID;
     uint256 private constant _MINT_FEE = 10000000000000000;
 
-    constructor() public ERC721("AvatarForENS", "ENSAVATAR") {}
+    constructor() public ERC721("SecretMessages", "SECRET") {}
 
     /**
      * @dev Mints a new NFT token.
      *
      * Returns the token ID of the newly minted NFT.
      */
-    function mintNFT(address minter, string calldata ensName) external payable returns (uint256)
+    function mintNFT(address minter, string calldata message) external payable returns (uint256)
     {
         require(msg.value >= _MINT_FEE, "Not enough ETH to mint");
 
-        bytes memory seedBytes = bytes(ensName);
-        require(seedBytes.length > 0, "Token seed is empty");
+        bytes memory messageBytes = bytes(message);
+        require(messageBytes.length > 0, "No message provided");
 
         string memory seed;
-        string memory currentDateTime = getCurrentDateTime();
+        // string memory currentDateTime = getCurrentDateTime();
         seed = string(abi.encodePacked(
-            ensName,
-            " minted on ",
-            currentDateTime, " GMT"
+            message,
+            " - ",
+            StringConversions.addressToString(msg.sender)
         ));
 
         // Mint the token
@@ -57,26 +57,25 @@ contract AvatarForENS is ERC721, Ownable {
         return _tokenID;
     }
 
-    function getCurrentDateTime() private view returns (string memory datetime) {
-        (uint year, uint month, uint day, uint hour, uint minute, uint second) = BokkyPooBahsDateTimeLibrary.timestampToDateTime(block.timestamp);
-        
-        string memory hourStr = string(abi.encodePacked(
-            (hour < 10) ? "0" : "",
-            Strings.toString(hour)
-        ));
-        string memory minuteStr = string(abi.encodePacked(
-            (minute < 10) ? "0" : "",
-            Strings.toString(minute)
-        ));
-        string memory secondStr = string(abi.encodePacked(
-            (second < 10) ? "0" : "",
-            Strings.toString(second)
-        ));
+    /**
+     * @dev Generate contract metadata
+     */
+    function contractURI() public pure returns (string memory) {
+        string memory contractImage = Base64.encode(bytes(SVGGenerator.generateContractImage()));
 
-        datetime = string(abi.encodePacked(
-            Strings.toString(year),"-",Strings.toString(month),"-",Strings.toString(day)," ",
-            hourStr,":",minuteStr,":",secondStr
-        ));
+        return string(abi.encodePacked(
+                'data:application/json;base64,',
+                Base64.encode(
+                    bytes(
+                        abi.encodePacked(
+                            '{"name":"Secret Messages",',
+                            '"description":"On-chain generated SVG art encoding a secret message from the minter",',
+                            '"image":"data:image/svg+xml;base64,', contractImage, '",',
+                            '"external_link": "https://karsh.xyz"}'
+                        )
+                    )
+                )
+            ));
     }
 
     /**
@@ -168,8 +167,8 @@ contract AvatarForENS is ERC721, Ownable {
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name":"Avatar for ', seed, '",',
-                            '"description":"Each avatar is a one of a kind on-chain generated SVG which is seeded by the combined hash of the minters ENS domain/wallet address and the current block timestamp.  This avatar was minted using the seed ', seed, '",',
+                            '{"name":"Secret Message #', Strings.toString(tokenID), '",',
+                            '"description":"', seed, '",',
                             '"image":"data:image/svg+xml;base64,', image, '",',
                             '"attributes":', attributes, '}'
                         )

@@ -11,8 +11,18 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./HSLGenerator.sol";
 import "../structs/AnimateTransformInputs.sol";
 import "../structs/ArtAttributes.sol";
+import "./StringConversions.sol";
 
 library SVGGenerator {
+    /**
+     * @dev Predefined image for the contract metadata
+     */
+    function generateContractImage() external pure returns (string memory image) {
+        image = string(abi.encodePacked(
+            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'><defs><path id='parentPolygon' d='M 0 0 C 70 -42, 30 70, 65 54 S 7 52, 0 0' stroke='hsl(0,0%,40%)' /><g id='polygonGroups'><use xlink:href='#parentPolygon' transform='matrix(0.16 -0.04 0.01 -0.32 -0.76 0.90)' fill='hsl(253,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;125;0;' dur='23s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.91 -0.49 -0.92 0.10 0.03 -0.29)' fill='hsl(43,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;88;0;' dur='12s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.41 -0.64 0.89 0.25 0.95 -0.45)' fill='hsl(103,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;96;0;' dur='5s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(0.94 0.67 -0.37 -0.77 0.89 0.24)' fill='hsl(193,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='8s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;82;0;' dur='20s' repeatCount='indefinite' additive='sum'/></use></g></defs><rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/><g><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' /><animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/></g></svg>"
+        ));
+    }
+   
     /**
      * @dev Generate pseudo-random SVG art attributes based on the given seed
      * Returns an ArtAttributes struct
@@ -72,35 +82,35 @@ library SVGGenerator {
                 (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 path = string(abi.encodePacked(
                     path,
-                    "C ", intToString(x), " ", intToString(y), ", "
+                    "C ", StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
                 ));
 
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 path = string(abi.encodePacked(
                     path,
-                    intToString(x), " ", intToString(y), ", "
+                    StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
                 ));
 
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 path = string(abi.encodePacked(
                     path,
-                    intToString(x), " ", intToString(y), " "
+                    StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), " "
                 ));
             } else {
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 path = string(abi.encodePacked(
                     path,
-                    "S ", intToString(x), " ", intToString(y), ", "
+                    "S ", StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
                 ));
 
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
                 path = string(abi.encodePacked(
                     path,
-                    intToString(x), " ", intToString(y), " "
+                    StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), " "
                 ));
             }
         }
@@ -108,7 +118,7 @@ library SVGGenerator {
         (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
         path = string(abi.encodePacked(
             path,
-            "S ", intToString(x), " ", intToString(y), ", "
+            "S ", StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
         ));
         path = string(abi.encodePacked(
             path,
@@ -137,7 +147,7 @@ library SVGGenerator {
         for (uint i = 0; i < numOfEdges - 1; i++) {
             (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
             (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-            points[i] = string(abi.encodePacked(intToString(x), ",", intToString(y)));
+            points[i] = string(abi.encodePacked(StringConversions.int256ToString(x), ",", StringConversions.int256ToString(y)));
         }
 
         // Update the hash of the seed
@@ -167,7 +177,7 @@ library SVGGenerator {
         int x;
         for (uint i = 0; i < 6; i++) {
             (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-            transformMatrix = string(abi.encodePacked(transformMatrix, intToStringDecimalTwoSigFigs(x), (i == 5) ? "": " "));
+            transformMatrix = string(abi.encodePacked(transformMatrix, StringConversions.decimalTwoSigFigsToStrings(x), (i == 5) ? "": " "));
         }
         transformMatrix = string(abi.encodePacked(transformMatrix, ")"));
 
@@ -189,7 +199,7 @@ library SVGGenerator {
         (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minX, maxX);
         (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minY, maxY);
         translate = string(abi.encodePacked(
-            "translate(", intToString(x), ",", intToString(y), ")"
+            "translate(", StringConversions.int256ToString(x), ",", StringConversions.int256ToString(y), ")"
         ));
 
         newHashOfSeed = currentHashOfSeed;
@@ -204,7 +214,7 @@ library SVGGenerator {
      */
     function generateAnimate(string memory attributeName, string memory values, int dur) private pure returns (string memory animate) {
         animate = string(abi.encodePacked(
-            "<animate attributeName='", attributeName, "' values='", values, "' dur='", intToString(dur), "s' repeatCount='indefinite'/>"
+            "<animate attributeName='", attributeName, "' values='", values, "' dur='", StringConversions.int256ToString(dur), "s' repeatCount='indefinite'/>"
         ));
     }
 
@@ -215,7 +225,7 @@ library SVGGenerator {
      */
     function generateAnimateTransform(AnimateTransformInputs memory input) private pure returns (string memory animate) {
         animate = string(abi.encodePacked(
-            "<animateTransform attributeName='", input.attributeName, "' attributeType='", input.attributeType, "' type='", input.typeOfTransform, "' values='", input.values, "' dur='", intToString(input.dur), "s' repeatCount='indefinite' additive='sum'/>"
+            "<animateTransform attributeName='", input.attributeName, "' attributeType='", input.attributeType, "' type='", input.typeOfTransform, "' values='", input.values, "' dur='", StringConversions.int256ToString(input.dur), "s' repeatCount='indefinite' additive='sum'/>"
         ));
     }
 
@@ -260,7 +270,7 @@ library SVGGenerator {
         string memory animateTransformXValues;
         animateTransformXValues = string(abi.encodePacked(
             "0;",
-            intToString(translateFactor),";",
+            StringConversions.int256ToString(translateFactor),";",
             "0;"
         ));
         AnimateTransformInputs memory input = AnimateTransformInputs(
@@ -280,39 +290,5 @@ library SVGGenerator {
         ));
 
         newHashOfSeed = currentHashOfSeed;
-    }
-
-    /**
-    * @dev Utility functions for converting int to string
-    * Returns string representation of int
-    */
-    function intToString(int x) private pure returns (string memory) {
-        unchecked {
-            return string(abi.encodePacked(x < 0 ? "-": "", Strings.toString(uint(x >=0 ? x : -x))));
-        }
-    }
-
-    /**
-    * @dev Utility functions that converts an int to a decimal with 2 significant digits
-    * Returns string representation of decimal
-    */
-    function intToStringDecimalTwoSigFigs(int x) private pure returns (string memory decimal) {
-        int whole = x / 100;
-            
-        int fractionInt = x % 100;
-        uint fraction = uint(fractionInt >=0 ? fractionInt : -fractionInt);
-        string memory fractionStr;
-        if (fraction < 10) {
-            fractionStr = string(abi.encodePacked("0",Strings.toString(fraction)));
-        } else {
-            fractionStr = Strings.toString(fraction);
-        }
-
-        decimal = string(abi.encodePacked(
-            (x >= -99 && x < 0) ? "-": "",
-            intToString(whole),
-            ".",
-            fractionStr
-        ));
     }
 }
