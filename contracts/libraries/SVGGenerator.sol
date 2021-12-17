@@ -22,11 +22,11 @@ library SVGGenerator {
 
         // Generate number of edges for the parent polygon
         int numOfEdges;
-        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 1, 3);
+        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 1, 2);
 
         // Generate number of polygon layers to use
         int numOfPolygonGroups;
-        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 4);
+        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
 
         // Generate color scheme
         int colorScheme;
@@ -231,37 +231,37 @@ library SVGGenerator {
 
         // Generate transform matrix
         string memory transformMatrix;
-        (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -200, 200);
+        (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -100, 100);
 
-        // Generate translate transformation
-        string memory translate;
-        if (polygonIndex == 1) {
-            translate = "translate(0,0)";
-        } else if (polygonIndex == 2) {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 30, 40, 0, 10);
-        } else if (polygonIndex == 3) {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 30, 40);
-        } else {
-            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 10*int(polygonIndex), 10*int(polygonIndex) + 10, 10*int(polygonIndex), 10*int(polygonIndex) + 10);
-        }
+        // // Generate translate transformation
+        // string memory translate;
+        // if (polygonIndex == 1) {
+        //     translate = "translate(0,0)";
+        // } else if (polygonIndex == 2) {
+        //     (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 30, 40, 0, 10);
+        // } else if (polygonIndex == 3) {
+        //     (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 30, 40);
+        // } else {
+        //     (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 10*int(polygonIndex), 10*int(polygonIndex) + 10, 10*int(polygonIndex), 10*int(polygonIndex) + 10);
+        // }
 
-        polygonGroup = string(abi.encodePacked(polygonGroup, transformMatrix, " ", translate,"' fill='", HSLGenerator.toString(color), "' >"));
+        polygonGroup = string(abi.encodePacked(polygonGroup, transformMatrix, "' fill='", HSLGenerator.toString(color), "' >"));
 
         // Generate animations
         string memory animate = generateAnimate("opacity", "1;0.3;1", 2 * int(polygonIndex));
 
         int translateFactor;
-        (translateFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 50,80);
-        int dur = 5 * int(polygonIndex);
+        (translateFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 50,200);
+        int dur;
+        (dur, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 5, 30);
+        // int dur = 10 * int(polygonIndex);
 
         string memory animateTransformX;
         string memory animateTransformXValues;
         animateTransformXValues = string(abi.encodePacked(
             "0;",
             intToString(translateFactor),";",
-            "0;",
-            intToString(-translateFactor),";",
-            "0"
+            "0;"
         ));
         AnimateTransformInputs memory input = AnimateTransformInputs(
             "transform",
@@ -272,30 +272,10 @@ library SVGGenerator {
         );
         animateTransformX = generateAnimateTransform(input);
 
-        string memory animateTransformY;
-        string memory animateTransformYValues;
-        dur = dur + 5;
-        animateTransformYValues = string(abi.encodePacked(
-            "0;",
-            intToString(-translateFactor),";",
-            "0;",
-            intToString(translateFactor),";",
-            "0"
-        ));
-        input = AnimateTransformInputs(
-            "transform",
-            "XML",
-            "translateY",
-            animateTransformYValues,
-            dur
-        );
-        animateTransformY = generateAnimateTransform(input);
-
         polygonGroup = string(abi.encodePacked(
             polygonGroup,
             animate,
             animateTransformX,
-            animateTransformY,
              "</use>"
         ));
 
