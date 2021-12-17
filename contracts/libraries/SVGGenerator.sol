@@ -20,13 +20,13 @@ library SVGGenerator {
     function generateArtAttributes(string memory seed) external pure returns (ArtAttributes memory artAttributes, bytes32 newHashOfSeed) {
         bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
 
-        // Generate number of edges for the parent polygon
-        int numOfEdges;
-        (numOfEdges, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 4, 6);
+        // Generate number of control points for parent path
+        int numControlPoints;
+        (numControlPoints, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 6);
 
-        // Generate number of polygon layers to use
-        int numOfPolygonGroups;
-        (numOfPolygonGroups, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
+        // Generate number of layers to use
+        int numOfLayers;
+        (numOfLayers, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 3, 5);
 
         // Generate color scheme
         int colorScheme;
@@ -40,8 +40,8 @@ library SVGGenerator {
         int rootLightness;
         (rootLightness, hashOfSeed) = SeededRandomGenerator.randomInt(hashOfSeed, 30, 50);
 
-        artAttributes.numOfEdges = numOfEdges;
-        artAttributes.numOfPolygonGroups = numOfPolygonGroups;
+        artAttributes.numControlPoints = numControlPoints;
+        artAttributes.numOfLayers = numOfLayers;
         artAttributes.colorScheme = colorScheme;
         artAttributes.rootHue = rootHue;
         artAttributes.rootSaturation = rootSaturation;
@@ -50,6 +50,137 @@ library SVGGenerator {
         newHashOfSeed = hashOfSeed;
     }
 
+    /**
+     * @dev Generate a SVG path element
+     * @param currentHashOfSeed The current hash of the seed
+     * @param id The id of the path element
+     * @param numControlPoints Number of control points to use
+     * @param minX Minimum X value
+     * @param maxX Maximum X value
+     * @param minY Minimum Y value
+     * @param maxY Maximum Y value
+     * Returns a string containing the SVG path
+     */
+    function generatePath(bytes32 currentHashOfSeed, string memory id, int numControlPoints, int minX, int maxX, int minY, int maxY) external pure returns (string memory svgPath, bytes32 newHashOfSeed) {
+        string memory svgPathDAttributeStart;
+        (svgPathDAttributeStart, currentHashOfSeed) = generatePathDAttribute(currentHashOfSeed, numControlPoints, minX, maxX, minY, maxY);
+
+        string memory svgPathDAttribute;
+        (svgPathDAttribute, currentHashOfSeed) = generatePathDAttribute(currentHashOfSeed, numControlPoints, minX, maxX, minY, maxY);
+
+        svgPath = string(abi.encodePacked(
+            "<path id='", id, "' d='", svgPathDAttributeStart, "' stroke='hsl(0,0%,40%)'>",
+            "<animate attributeType='XML' attributeName='d' values='",
+            svgPathDAttributeStart, ";", svgPathDAttribute, ";", svgPathDAttributeStart, "' dur='10s' repeatCount='indefinite' />",
+            "</path>"
+        ));
+
+
+        newHashOfSeed = currentHashOfSeed;
+    }
+
+    /**
+     * @dev Generates a SVG path's d attribute containing bezier curves
+     * @param currentHashOfSeed The seed to use for generating the polygon
+     * @param numControlPoints The number of control points to use
+     * @param minX The minimum x value to use for the control points
+     * @param maxX The maximum x value to use for the control points
+     * @param minY The minimum y value to use for the control points
+     * @param maxY The maximum y value to use for the control points
+     */
+    function generatePathDAttribute(bytes32 currentHashOfSeed, int numControlPoints, int minX, int maxX, int minY, int maxY) private pure returns (string memory d, bytes32 newHashOfSeed) {
+        // Generate control points
+        d = "M 0 0 ";
+        string memory controlPoints;
+        for (int i = 0; i < numControlPoints; i++) {
+            if (i == 0) {
+                (controlPoints, currentHashOfSeed) = generateControlPointCType(currentHashOfSeed, minX, maxX, minY, maxY);
+            } else {
+                (controlPoints, currentHashOfSeed) = generateControlPointSType(currentHashOfSeed, minX, maxX, minY, maxY);
+            }
+            d = string(abi.encodePacked(
+                d,
+                controlPoints
+            ));
+        }
+        string memory tempControlPoint;
+        (tempControlPoint, currentHashOfSeed) = generateControlPoint(currentHashOfSeed, minX, maxX, minY, maxY);
+        d = string(abi.encodePacked(
+            d,
+            "S ",
+            tempControlPoint, ",",
+            " 0 0"
+        ));
+
+        newHashOfSeed = currentHashOfSeed;
+    }
+
+    /**
+     * @dev Generate a C type bezier curve control point
+     * @param currentHashOfSeed The seed to use for generating the control point
+     * @param minX The minimum x value to use for the control point
+     * @param minY The minimum y value to use for the control point
+     * @param maxX The maximum x value to use for the control point
+     * @param maxY The maximum y value to use for the control point
+     */
+    function generateControlPointCType(bytes32 currentHashOfSeed, int minX, int maxX, int minY, int maxY) private pure returns (string memory controlPointCType, bytes32 newHashOfSeed) {
+        controlPointCType = "C ";
+        string memory controlPoint;
+        for (uint i = 0; i < 3; i++) {
+            (controlPoint, currentHashOfSeed) = generateControlPoint(currentHashOfSeed, minX, maxX, minY, maxY);
+            controlPointCType = string(abi.encodePacked(
+                controlPointCType,
+                controlPoint,
+                (i == 2) ? " " : ", "
+            ));
+        }
+        newHashOfSeed = currentHashOfSeed;
+    }
+
+    /**
+     * @dev Generate a S type bezier curve control point
+     * @param currentHashOfSeed The seed to use for generating the control point
+     * @param minX The minimum x value to use for the control point
+     * @param minY The minimum y value to use for the control point
+     * @param maxX The maximum x value to use for the control point
+     * @param maxY The maximum y value to use for the control point
+     */
+    function generateControlPointSType(bytes32 currentHashOfSeed, int minX, int maxX, int minY, int maxY) private pure returns (string memory controlPointSType, bytes32 newHashOfSeed) {
+        controlPointSType = "S ";
+        string memory controlPoint;
+        for (uint i = 0; i < 2; i++) {
+            (controlPoint, currentHashOfSeed) = generateControlPoint(currentHashOfSeed, minX, maxX, minY, maxY);
+            controlPointSType = string(abi.encodePacked(
+                controlPointSType,
+                controlPoint,
+                (i == 1) ? " " : ", "
+            ));
+        }
+        newHashOfSeed = currentHashOfSeed;
+    }
+
+    /**
+     * @dev Generate a control point
+     * @param currentHashOfSeed The seed to use for generating the control point
+     * @param minX The minimum x value to use for the control point
+     * @param minY The minimum y value to use for the control point
+     * @param maxX The maximum x value to use for the control point
+     * @param maxY The maximum y value to use for the control point
+     */
+    function generateControlPoint(bytes32 currentHashOfSeed, int minX, int maxX, int minY, int maxY) private pure returns (string memory controlPoint, bytes32 newHashOfSeed) {
+        int x;
+        (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minX, maxX);
+        int y;
+        (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minY, maxY);
+
+        controlPoint = string(abi.encodePacked(
+            intToString(x),
+            " ",
+            intToString(y)
+        ));
+        newHashOfSeed = currentHashOfSeed;
+    }
+    
 
     /**
      * @dev Generates an SVG polygon using the provided hash of seed
@@ -148,6 +279,46 @@ library SVGGenerator {
         animate = string(abi.encodePacked(
             "<animateTransform attributeName='", input.attributeName, "' attributeType='", input.attributeType, "' type='", input.typeOfTransform, "' values='", input.values, "' dur='", intToString(input.dur), "s' repeatCount='indefinite' additive='sum'/>"
         ));
+    }
+
+    /**
+     * @dev Generate a element containing path along with its transformations and color
+     * @param currentHashOfSeed The seed to use for generating the polygon group params
+     * @param id ID of the parent polygon group element
+     * @param color HSL color for the polygon group
+     * @param layerIndex Index of the layer in the group
+     */
+    function generatePathGroup(bytes32 currentHashOfSeed, string memory id, HSL memory color, uint layerIndex) external pure returns (string memory pathGroup, bytes32 newHashOfSeed) {
+        pathGroup = string(abi.encodePacked("<use xlink:href='#", id, "' transform='"));
+
+        // Generate transform matrix
+        string memory transformMatrix;
+        (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -100, 100);
+
+        // Generate translate transformation
+        string memory translate;
+        if (layerIndex == 1) {
+            translate = "translate(0,0)";
+        } else if (layerIndex == 2) {
+            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 30, 40, 0, 10);
+        } else if (layerIndex == 3) {
+            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 30, 40);
+        } else {
+            (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 10*int(layerIndex), 10*int(layerIndex) + 10, 10*int(layerIndex), 10*int(layerIndex) + 10);
+        }
+
+        pathGroup = string(abi.encodePacked(pathGroup, transformMatrix, " ", translate,"' fill='", HSLGenerator.toString(color), "' >"));
+
+        // Generate animation
+        string memory animate = generateAnimate("opacity", "1;0.3;1", 2 * int(layerIndex));
+
+        pathGroup = string(abi.encodePacked(
+            pathGroup,
+            animate,
+             "</use>"
+        ));
+
+        newHashOfSeed = currentHashOfSeed;
     }
 
     /**

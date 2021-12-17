@@ -59,6 +59,9 @@ contract AvatarForENS is ERC721, Ownable {
     function tokenURI(uint256 tokenID) public view override returns (string memory)
     {
         string memory seed = _tokenSeed[tokenID];
+        bytes memory seedBytes = bytes(seed);
+        require(seedBytes.length > 0, "Token does not exist");
+        
         string memory _tokenURI = generateTokenURI(seed, tokenID);
         return _tokenURI;       
     }
@@ -102,12 +105,12 @@ contract AvatarForENS is ERC721, Ownable {
         attributes = string(abi.encodePacked(
             "[",
                 "{",
-                    '"trait_type":"Polygon Edge Count",',
-                    '"value":"', Strings.toString(uint(artAttributes.numOfEdges)),'"',
+                    '"trait_type":"Control Points Count",',
+                    '"value":"', Strings.toString(uint(artAttributes.numControlPoints)),'"',
                 "},",
                 "{",
-                    '"trait_type":"Polygon Layer Count",',
-                    '"value":"', Strings.toString(uint(artAttributes.numOfPolygonGroups)),'"',
+                    '"trait_type":"Layer Count",',
+                    '"value":"', Strings.toString(uint(artAttributes.numOfLayers)),'"',
                 "},",
                 "{",
                     '"trait_type":"Color Scheme",',
@@ -147,54 +150,54 @@ contract AvatarForENS is ERC721, Ownable {
         bytes32 hashOfSeed;
         (artAttributes, hashOfSeed) = SVGGenerator.generateArtAttributes(seed);
 
-        // Generate SVG element for the main polygon
-        string memory parentPolygon;
-        string memory parentPolygonID = "parentPolygon";
-        (parentPolygon, hashOfSeed) = SVGGenerator.generatePolygon(hashOfSeed, uint(artAttributes.numOfEdges), parentPolygonID, -200, 200);
+        // Generate SVG element for the main path
+        string memory parentPath;
+        string memory parentPathID = "parentPath";
+        (parentPath, hashOfSeed) = SVGGenerator.generatePath(hashOfSeed, parentPathID, artAttributes.numControlPoints, -200, 200, -100, 100);
 
-        // Generate HSL color pallete for all the polygon layers
-        HSL[] memory HSLColors = new HSL[](uint(artAttributes.numOfPolygonGroups));
+        // Generate HSL color pallete for all the layers
+        HSL[] memory HSLColors = new HSL[](uint(artAttributes.numOfLayers));
 
         HSL[3] memory HSLColors1 = HSLGenerator.generateHSLPalette(artAttributes.colorScheme, artAttributes.rootHue, artAttributes.rootSaturation, artAttributes.rootLightness);
         HSLColors[0] = HSLColors1[0];
         HSLColors[1] = HSLColors1[1];
         HSLColors[2] = HSLColors1[2];
 
-        if (artAttributes.numOfPolygonGroups > 3) {
+        if (artAttributes.numOfLayers > 3) {
             HSL[3] memory HSLColors2 = HSLGenerator.generateHSLPalette(artAttributes.colorScheme, int(HSLColors1[1].hue), artAttributes.rootSaturation, artAttributes.rootLightness);
-            for (uint i = 3; i < uint(artAttributes.numOfPolygonGroups); i++) {
+            for (uint i = 3; i < uint(artAttributes.numOfLayers); i++) {
                 HSLColors[i] = HSLColors2[i - 2]; //NOTE: i-2 will only work when numOfPolygonGroups is 5 or less
             }
         }
 
         // Generate polygon groups
-        string memory polygonGroups = "<g id='polygonGroups'>";
-        string memory polygon;
-        for (uint i = 1; i <= uint(artAttributes.numOfPolygonGroups); i++) {
-            (polygon, hashOfSeed) = SVGGenerator.generatePolygonGroup(hashOfSeed, parentPolygonID, HSLColors[i-1], i);
-            polygonGroups = string(abi.encodePacked(
-                polygonGroups,
-                polygon
+        string memory pathGroups = "<g id='pathGroups'>";
+        string memory path;
+        for (uint i = 1; i <= uint(artAttributes.numOfLayers); i++) {
+            (path, hashOfSeed) = SVGGenerator.generatePathGroup(hashOfSeed, parentPathID, HSLColors[i-1], i);
+            pathGroups = string(abi.encodePacked(
+                pathGroups,
+                path
             ));
         }
-        polygonGroups = string(abi.encodePacked(polygonGroups, "</g>"));
+        pathGroups = string(abi.encodePacked(pathGroups, "</g>"));
 
 
         // Assemble SVG
         return string(abi.encodePacked(
             "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>",
                 "<defs>",
-                    parentPolygon,
-                    polygonGroups,
+                    parentPath,
+                    pathGroups,
                 "</defs>",
                 "<rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/>",
                 "<g>",
-                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/>",
-                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' />",
-                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' />",
-                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' />",
-                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' />",
-                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' />",
+                    "<use xlink:href='#pathGroups' transform='translate(320, 320) rotate(0,0,0)'/>",
+                    "<use xlink:href='#pathGroups' transform='translate(320, 320) rotate(60,0,0)' />",
+                    "<use xlink:href='#pathGroups' transform='translate(320, 320) rotate(120,0,0)' />",
+                    "<use xlink:href='#pathGroups' transform='translate(320, 320) rotate(180,0,0)' />",
+                    "<use xlink:href='#pathGroups' transform='translate(320, 320) rotate(240,0,0)' />",
+                    "<use xlink:href='#pathGroups' transform='translate(320, 320) rotate(300,0,0)' />",
                     "<animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='30s' repeatCount='indefinite'/>",
                 "</g>",
             "</svg>"));

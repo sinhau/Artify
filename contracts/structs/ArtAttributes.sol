@@ -7,8 +7,8 @@ pragma solidity ^0.8.0;
  */
 
 struct ArtAttributes {
-    int numOfEdges;
-    int numOfPolygonGroups;
+    int numControlPoints;
+    int numOfLayers;
     int colorScheme;
     int rootHue;
     int rootSaturation;

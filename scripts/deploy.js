@@ -17,18 +17,18 @@ async function main() {
   // const HSLGeneratorContract = await HSLGeneratorContractFactory.deploy();
   // console.log("HSLGenerator deployed to", HSLGeneratorContract.address);
 
-  // Deploy SVGGenerator (already deployed at 0x10D3264c2B257EB33Ee53C0A30f408ab6083C5cD)
-  // const SVGGeneratorContractFactory = await ethers.getContractFactory(
-  //   "SVGGenerator",
-  //   {
-  //     libraries: {
-  //       SeededRandomGenerator: "0x241340e863ae394dDE6cd873960512FBA284fc7E",
-  //       HSLGenerator: "0x150f9BA13F65C391207A832fA3d487B6D5f262e6"
-  //     },
-  //   }
-  // );
-  // const SVGGeneratorContract = await SVGGeneratorContractFactory.deploy();
-  // console.log("SVGGenerator deployed to", SVGGeneratorContract.address);
+  // Deploy SVGGenerator (already deployed at 0x18B1581537CFf883a58c0546802A5DBD211b2ea3)
+  const SVGGeneratorContractFactory = await ethers.getContractFactory(
+    "SVGGenerator",
+    {
+      libraries: {
+        SeededRandomGenerator: "0x241340e863ae394dDE6cd873960512FBA284fc7E",
+        HSLGenerator: "0x150f9BA13F65C391207A832fA3d487B6D5f262e6",
+      },
+    }
+  );
+  const SVGGeneratorContract = await SVGGeneratorContractFactory.deploy();
+  console.log("SVGGenerator deployed to", SVGGeneratorContract.address);
 
   // Deploy main contract
   const AvatarForENSContractFactory = await ethers.getContractFactory(
@@ -36,7 +36,8 @@ async function main() {
     {
       libraries: {
         HSLGenerator: "0x150f9BA13F65C391207A832fA3d487B6D5f262e6",
-        SVGGenerator: "0x10D3264c2B257EB33Ee53C0A30f408ab6083C5cD",
+        SVGGenerator: SVGGeneratorContract.address,
+        // SVGGenerator: "0x18B1581537CFf883a58c0546802A5DBD211b2ea3",
       },
     }
   );
