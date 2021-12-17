@@ -240,22 +240,18 @@ library SVGGenerator {
         polygonGroup = string(abi.encodePacked("<use xlink:href='#", id, "' transform='"));
 
         // Generate transform matrix
-        string memory transformMatrix;
-        (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -100, 100);
+        if (polygonIndex != 1) {
+            string memory transformMatrix;
+            (transformMatrix, currentHashOfSeed) = generateMatrixTransform(currentHashOfSeed, -100, 100);
 
-        // // Generate translate transformation
-        // string memory translate;
-        // if (polygonIndex == 1) {
-        //     translate = "translate(0,0)";
-        // } else if (polygonIndex == 2) {
-        //     (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 30, 40, 0, 10);
-        // } else if (polygonIndex == 3) {
-        //     (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 0, 10, 30, 40);
-        // } else {
-        //     (translate, currentHashOfSeed) = generateTranslate(currentHashOfSeed, 10*int(polygonIndex), 10*int(polygonIndex) + 10, 10*int(polygonIndex), 10*int(polygonIndex) + 10);
-        // }
-
-        polygonGroup = string(abi.encodePacked(polygonGroup, transformMatrix, "' fill='", HSLGenerator.toString(color), "' >"));
+            polygonGroup = string(abi.encodePacked(
+                polygonGroup, transformMatrix, "' "
+            ));
+        }
+        polygonGroup = string(abi.encodePacked(
+            polygonGroup,
+            "fill='", HSLGenerator.toString(color), "' >"
+        ));
 
         // Generate animations
         string memory animate = generateAnimate("opacity", "1;0.3;1", 2 * int(polygonIndex));
