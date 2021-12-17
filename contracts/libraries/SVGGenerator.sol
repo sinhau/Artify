@@ -19,7 +19,7 @@ library SVGGenerator {
      */
     function generateContractImage() external pure returns (string memory image) {
         image = string(abi.encodePacked(
-            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'><defs><path id='parentPolygon' d='M 0 0 C 70 -42, 30 70, 65 54 S 7 52, 0 0' stroke='hsl(0,0%,40%)' /><g id='polygonGroups'><use xlink:href='#parentPolygon' transform='matrix(0.16 -0.04 0.01 -0.32 -0.76 0.90)' fill='hsl(253,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;125;0;' dur='23s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.91 -0.49 -0.92 0.10 0.03 -0.29)' fill='hsl(43,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;88;0;' dur='12s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.41 -0.64 0.89 0.25 0.95 -0.45)' fill='hsl(103,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;96;0;' dur='5s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(0.94 0.67 -0.37 -0.77 0.89 0.24)' fill='hsl(193,94%,33%)' ><animate attributeName='opacity' values='1;0.3;1' dur='8s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;82;0;' dur='20s' repeatCount='indefinite' additive='sum'/></use></g></defs><rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/><g><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' /><animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/></g></svg>"
+            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'><metadata><message>Artsy Messages: On-chain generated SVG art encoding a secret message from the minter - 0xdd175a204142040850211b529dcb9af6ee743e1b</message></metadata><defs><path id='parentPolygon' d='M 0 0 C 43 24, 0 -12, 42 -21 S 57 19, 3 20 S -13 8, 0 0' stroke='hsl(0,0%,40%)' /><g id='polygonGroups'><use xlink:href='#parentPolygon' transform='matrix(-0.79 -0.97 -0.62 -0.33 0.08 -0.12)' fill='hsl(320,96%,50%)' ><animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;69;0;' dur='25s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(0.92 0.76 -0.53 0.70 -0.06 0.20)' fill='hsl(350,96%,50%)' ><animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;56;0;' dur='20s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.43 -0.36 -0.71 0.10 0.36 0.46)' fill='hsl(20,96%,50%)' ><animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;140;0;' dur='6s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(0.75 -0.52 -0.10 0.75 0.09 0.08)' fill='hsl(20,96%,50%)' ><animate attributeName='opacity' values='1;0.3;1' dur='8s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;87;0;' dur='13s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.38 1.00 -0.92 -0.95 0.05 -0.19)' fill='hsl(50,96%,50%)' ><animate attributeName='opacity' values='1;0.3;1' dur='10s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;103;0;' dur='18s' repeatCount='indefinite' additive='sum'/></use></g></defs><rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/><g><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' /><animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/></g></svg>"
         ));
     }
    
@@ -79,35 +79,35 @@ library SVGGenerator {
         for (uint i = 0; i < numOfCurves; i++) {
             if (i == 0) {
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min/2, max/2);
                 path = string(abi.encodePacked(
                     path,
                     "C ", StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
                 ));
 
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min/2, max/2);
                 path = string(abi.encodePacked(
                     path,
                     StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
                 ));
 
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min/2, max/2);
                 path = string(abi.encodePacked(
                     path,
                     StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), " "
                 ));
             } else {
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min/2, max/2);
                 path = string(abi.encodePacked(
                     path,
                     "S ", StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
                 ));
 
                 (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+                (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min/2, max/2);
                 path = string(abi.encodePacked(
                     path,
                     StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), " "
@@ -115,7 +115,7 @@ library SVGGenerator {
             }
         }
         (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-        (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
+        (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min/2, max/2);
         path = string(abi.encodePacked(
             path,
             "S ", StringConversions.int256ToString(x), " ", StringConversions.int256ToString(y), ", "
@@ -261,7 +261,7 @@ library SVGGenerator {
         string memory animate = generateAnimate("opacity", "1;0.3;1", 2 * int(polygonIndex));
 
         int translateFactor;
-        (translateFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 50,200);
+        (translateFactor, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 100,250);
         int dur;
         (dur, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, 5, 30);
         // int dur = 10 * int(polygonIndex);
