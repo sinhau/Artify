@@ -229,7 +229,7 @@ contract ArtsyMessages is ERC721, Ownable {
                         seed,
                     "</message>",
                     "<contract>",
-                        "Artsy Messages: On-chain generated SVG art encoding a secret message from the minter. Created by 0xdd175a204142040850211b529dcb9af6ee743e1b"
+                        "Artsy Messages: On-chain generated SVG art encoding a message from the minter. Created by 0xdd175a204142040850211b529dcb9af6ee743e1b"
                     "</contract>",
                 "</metadata>",
                 "<defs>",
