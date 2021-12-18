@@ -14,7 +14,6 @@ import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
-import "./libraries/StringConversions.sol";
 
 contract Artify is ERC721, Ownable {
     mapping (uint256 => string) private _tokenSeed;
@@ -36,23 +35,15 @@ contract Artify is ERC721, Ownable {
         bytes memory messageBytes = bytes(message);
         require(messageBytes.length > 0, "No message provided");
 
-        string memory seed;
-        // string memory currentDateTime = getCurrentDateTime();
-        seed = string(abi.encodePacked(
-            message,
-            " - ",
-            StringConversions.addressToString(msg.sender)
-        ));
-
         // Mint the token
         _tokenID += 1;
         _safeMint(minter, _tokenID);
         
         // Set the token's seed
-        _tokenSeed[_tokenID] = seed;
+        _tokenSeed[_tokenID] = message;
 
         // Generate token art
-        _tokenArt[_tokenID] = generateArt(seed);
+        _tokenArt[_tokenID] = generateArt(message);
 
         return _tokenID;
     }
