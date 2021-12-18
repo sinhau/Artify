@@ -233,7 +233,7 @@ contract Artify is ERC721, Ownable {
                     "</contract>",
                 "</metadata>",
                 "<defs>",
-                    "<filter id='blendSoft'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter>",
+                    "<filter id='blendSoft' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter>",
                     "<filter id='blendHard'><feGaussianBlur in='SourceGraphic' stdDeviation='1' /></filter>",
                     parentPolygon,
                     polygonGroups,
