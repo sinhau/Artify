@@ -1,7 +1,9 @@
 <svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg'
     xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>
     <metadata>
-        <message>'Fortune favors the bold.' - Virgil - 0xdd175a204142040850211b529dcb9af6ee743e1b</message>
+        <message>Artify: Permanently memorialize a message, quote, or any other text-based input on the blockchain.
+            Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your
+            friends, family, and the world. Created by karsh.eth - 0xdd175a204142040850211b529dcb9af6ee743e1b</message>
         <contract>Artify: Permanently memorialize a message, quote, or any other text-based input on the blockchain.
             Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your
             friends, family, and the world. Created by karsh.eth</contract>
@@ -13,36 +15,30 @@
         <filter id='blendHard'>
             <feGaussianBlur in='SourceGraphic' stdDeviation='1' />
         </filter>
-        <path id='parentPolygon' d='M 0 0 C 56 -4, 22 15, 3 8 S 64 38, 0 0' stroke='hsl(0,0%,40%)' />
+        <path id='parentPolygon' d='M 0 0 C -18 10, -35 -21, -51 22 S 70 1, -39 3 S 71 -4, 0 0' />
         <g id='polygonGroups'>
-            <use xlink:href='#parentPolygon' fill='hsl(226,100%,43%)' filter='url(#blendHard)'>
+            <use xlink:href='#parentPolygon' fill='hsl(57,85%,48%)' filter='url(#blendHard)'>
                 <animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite' />
-                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;172;0;'
-                    dur='14s' repeatCount='indefinite' additive='sum' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;167;0;'
+                    dur='16s' repeatCount='indefinite' additive='sum' />
             </use>
-            <use xlink:href='#parentPolygon' transform='matrix(-1.21 1.09 -1.58 -1.36 -1.49 1.93)'
-                fill='hsl(346,100%,43%)' filter='url(#blendSoft)'>
+            <use xlink:href='#parentPolygon' transform='matrix(1.97 0.68 0.10 1.35 -1.12 -1.50)' fill='hsl(87,85%,48%)'
+                filter='url(#blendSoft)'>
                 <animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite' />
-                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;168;0;'
-                    dur='5s' repeatCount='indefinite' additive='sum' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;161;0;'
+                    dur='24s' repeatCount='indefinite' additive='sum' />
             </use>
-            <use xlink:href='#parentPolygon' transform='matrix(-1.36 -1.39 1.54 1.12 -1.70 0.14)'
-                fill='hsl(106,100%,43%)' filter='url(#blendHard)'>
+            <use xlink:href='#parentPolygon' transform='matrix(-0.33 -1.11 1.81 0.77 -1.98 1.34)'
+                fill='hsl(117,85%,48%)' filter='url(#blendHard)'>
                 <animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite' />
-                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;172;0;'
-                    dur='18s' repeatCount='indefinite' additive='sum' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;146;0;'
+                    dur='27s' repeatCount='indefinite' additive='sum' />
             </use>
-            <use xlink:href='#parentPolygon' transform='matrix(1.39 -1.24 0.82 0.92 -0.03 0.98)'
-                fill='hsl(106,100%,43%)' filter='url(#blendSoft)'>
+            <use xlink:href='#parentPolygon' transform='matrix(1.30 1.66 -1.86 0.88 1.12 0.98)' fill='hsl(117,85%,48%)'
+                filter='url(#blendSoft)'>
                 <animate attributeName='opacity' values='1;0.3;1' dur='8s' repeatCount='indefinite' />
-                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;177;0;'
-                    dur='10s' repeatCount='indefinite' additive='sum' />
-            </use>
-            <use xlink:href='#parentPolygon' transform='matrix(0.14 0.86 0.78 1.71 -1.98 -0.28)'
-                fill='hsl(226,100%,43%)' filter='url(#blendHard)'>
-                <animate attributeName='opacity' values='1;0.3;1' dur='10s' repeatCount='indefinite' />
-                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;127;0;'
-                    dur='18s' repeatCount='indefinite' additive='sum' />
+                <animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;165;0;'
+                    dur='11s' repeatCount='indefinite' additive='sum' />
             </use>
         </g>
     </defs>
