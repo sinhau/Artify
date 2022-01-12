@@ -52,7 +52,7 @@ contract Artify is ERC721, Ownable {
         require(messageBytes.length > 0, "No message provided");
 
         _tokenID += 1;
-        
+
         // Set the token's seed
         _tokenSeed[_tokenID] = message;
 
