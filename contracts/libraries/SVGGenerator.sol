@@ -15,6 +15,79 @@ import "./StringConversions.sol";
 
 library SVGGenerator {
     /**
+     * @dev Generate custom SVG art based on token's seed.
+     * @param seed The seed to generate the SVG art from
+     * Returns the SVG image as bytes
+     */
+    function generateArt(string memory seed) external pure returns (string memory) {
+        ArtAttributes memory artAttributes;
+        bytes32 hashOfSeed;
+        (artAttributes, hashOfSeed) = generateArtAttributes(seed);
+
+        // Generate SVG element for the main polygon
+        string memory parentPolygon;
+        string memory parentPolygonID = "parentPolygon";
+        (parentPolygon, hashOfSeed) = generatePath(hashOfSeed, uint(artAttributes.numOfEdges), parentPolygonID, -80, 80);
+
+        // Generate HSL color pallete for all the polygon layers
+        HSL[] memory HSLColors = new HSL[](uint(artAttributes.numOfPolygonGroups));
+
+        HSL[3] memory HSLColors1 = HSLGenerator.generateHSLPalette(artAttributes.colorScheme, artAttributes.rootHue, artAttributes.rootSaturation, artAttributes.rootLightness);
+        HSLColors[0] = HSLColors1[0];
+        HSLColors[1] = HSLColors1[1];
+        HSLColors[2] = HSLColors1[2];
+
+        if (artAttributes.numOfPolygonGroups > 3) {
+            HSL[3] memory HSLColors2 = HSLGenerator.generateHSLPalette(artAttributes.colorScheme, int(HSLColors1[1].hue), artAttributes.rootSaturation, artAttributes.rootLightness);
+            for (uint i = 3; i < uint(artAttributes.numOfPolygonGroups); i++) {
+                HSLColors[i] = HSLColors2[i - 2]; //NOTE: i-2 will only work when numOfPolygonGroups is 5 or less
+            }
+        }
+
+        // Generate polygon groups
+        string memory polygonGroups = "<g id='polygonGroups'>";
+        string memory polygon;
+        for (uint i = 1; i <= uint(artAttributes.numOfPolygonGroups); i++) {
+            (polygon, hashOfSeed) = generatePolygonGroup(hashOfSeed, parentPolygonID, HSLColors[i-1], i);
+            polygonGroups = string(abi.encodePacked(
+                polygonGroups,
+                polygon
+            ));
+        }
+        polygonGroups = string(abi.encodePacked(polygonGroups, "</g>"));
+
+
+        // Assemble SVG
+        return string(abi.encodePacked(
+            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'>",
+                "<metadata>",
+                    "<message>",
+                        seed,
+                    "</message>",
+                    "<contract>",
+                        "Artify: Permanently memorialize a message, quote, or any other text-based input on the blockchain.  Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your friends, family, and the world. Created by karsh.eth"
+                    "</contract>",
+                "</metadata>",
+                "<defs>",
+                    "<filter id='blendSoft' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter>",
+                    "<filter id='blendHard'><feGaussianBlur in='SourceGraphic' stdDeviation='1' /></filter>",
+                    parentPolygon,
+                    polygonGroups,
+                "</defs>",
+                "<rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/>",
+                "<g>",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/>",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' />",
+                    "<use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' />",
+                    "<animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/>",
+                "</g>",
+            "</svg>"));
+    }
+
+    /**
      * @dev Predefined image for the contract metadata
      */
     function generateContractImage() external pure returns (string memory image) {
@@ -27,7 +100,7 @@ library SVGGenerator {
      * @dev Generate pseudo-random SVG art attributes based on the given seed
      * Returns an ArtAttributes struct
      */
-    function generateArtAttributes(string memory seed) external pure returns (ArtAttributes memory artAttributes, bytes32 newHashOfSeed) {
+    function generateArtAttributes(string memory seed) public pure returns (ArtAttributes memory artAttributes, bytes32 newHashOfSeed) {
         bytes32 hashOfSeed = SeededRandomGenerator.init(seed);
 
         // Generate number of edges for the parent polygon
@@ -69,7 +142,7 @@ library SVGGenerator {
      * @param max Maximum coordinate value of a control point vertex
      * Returns an SVG polygon element as a string
      */
-    function generatePath(bytes32 currentHashOfSeed, uint numOfCurves, string memory id, int min, int max) external pure returns (string memory path, bytes32 newHashOfSeed) {
+    function generatePath(bytes32 currentHashOfSeed, uint numOfCurves, string memory id, int min, int max) private pure returns (string memory path, bytes32 newHashOfSeed) {
         path = string(abi.encodePacked(
             "<path id='", id, "' d='M 0 0 "
         ));
@@ -139,7 +212,7 @@ library SVGGenerator {
      * @param max Maximum coordinate value of a polygon vertex
      * Returns an SVG polygon element as a string
      */
-    function generatePolygon(bytes32 currentHashOfSeed, uint numOfEdges, string memory id, int min, int max) external pure returns (string memory polygon, bytes32 newHashOfSeed) {
+    function generatePolygon(bytes32 currentHashOfSeed, uint numOfEdges, string memory id, int min, int max) private pure returns (string memory polygon, bytes32 newHashOfSeed) {
         // Generate all the vertices of the polygon
         string[] memory points = new string[](numOfEdges - 1);
         int x;
@@ -236,7 +309,7 @@ library SVGGenerator {
      * @param color HSL color for the polygon group
      * @param polygonIndex Index of the polygon in the group
      */
-    function generatePolygonGroup(bytes32 currentHashOfSeed, string memory id, HSL memory color, uint polygonIndex) external pure returns (string memory polygonGroup, bytes32 newHashOfSeed) {
+    function generatePolygonGroup(bytes32 currentHashOfSeed, string memory id, HSL memory color, uint polygonIndex) private pure returns (string memory polygonGroup, bytes32 newHashOfSeed) {
         polygonGroup = string(abi.encodePacked("<use xlink:href='#", id, "' "));
 
         // Generate transform matrix
