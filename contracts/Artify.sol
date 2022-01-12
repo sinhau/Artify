@@ -220,30 +220,22 @@ contract Artify is ERC721, Ownable {
         attributes = string(
             abi.encodePacked(
                 "[",
-                "{",
-                '"trait_type":"Bezier Curve Count",',
-                '"value":"',
-                Strings.toString(uint256(artAttributes.numOfEdges)),
-                '"',
-                "},",
-                "{",
-                '"trait_type":"Layer Count",',
-                '"value":"',
-                Strings.toString(uint256(artAttributes.numOfPolygonGroups)),
-                '"',
-                "},",
-                "{",
-                '"trait_type":"Color Scheme",',
-                '"value":"',
-                colorScheme,
-                '"',
-                "},",
-                "{",
-                '"trait_type":"Root HSL",',
-                '"value":"',
-                HSLGenerator.toString(hsl),
-                '"',
-                "}",
+                    "{",
+                        '"trait_type":"Bezier Curve Count",',
+                        '"value":"', Strings.toString(uint256(artAttributes.numOfEdges)), '"',
+                    "},",
+                    "{",
+                        '"trait_type":"Layer Count",',
+                        '"value":"', Strings.toString(uint256(artAttributes.numOfPolygonGroups)), '"',
+                    "},",
+                    "{",
+                        '"trait_type":"Color Scheme",',
+                        '"value":"', colorScheme, '"',
+                    "},",
+                    "{",
+                        '"trait_type":"Root HSL",',
+                        '"value":"', HSLGenerator.toString(hsl), '"',
+                    "}",
                 "]"
             )
         );
@@ -255,17 +247,10 @@ contract Artify is ERC721, Ownable {
                     Base64.encode(
                         bytes(
                             abi.encodePacked(
-                                '{"name":"Artify #',
-                                Strings.toString(tokenID),
-                                '",',
-                                '"description":"',
-                                seed,
-                                '",',
-                                '"image":"data:image/svg+xml;base64,',
-                                image,
-                                '",',
-                                '"attributes":',
-                                attributes,
+                                '{"name":"Artify #', Strings.toString(tokenID), '",',
+                                '"description":"', seed, '",',
+                                '"image":"data:image/svg+xml;base64,', image, '",',
+                                '"attributes":', attributes,
                                 "}"
                             )
                         )
