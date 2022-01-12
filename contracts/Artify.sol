@@ -21,6 +21,7 @@ contract Artify is ERC721, Ownable {
     uint256 private _tokenID;
     uint256 private constant _MINT_FEE = 10000000000000000;
     uint256 private _SALE_START_TIME = 1645084801; // Feb 17, 2022 @ 12:00:01 AM (PST)
+    bool private _PAUSE_SALE = false;
 
     constructor() public ERC721("Artify", "ARTIFY") {}
 
@@ -33,6 +34,7 @@ contract Artify is ERC721, Ownable {
     {
         require(msg.value >= _MINT_FEE, "Not enough ETH to mint");
         require(block.timestamp >= _SALE_START_TIME, "Cannot mint NFT before the sale starts");
+        require(!_PAUSE_SALE, "Cannot mint NFT while the sale is paused");
 
         bytes memory messageBytes = bytes(message);
         require(messageBytes.length > 0, "No message provided");
@@ -48,6 +50,21 @@ contract Artify is ERC721, Ownable {
         _tokenArt[_tokenID] = SVGGenerator.generateArt(message);
 
         return _tokenID;
+    }
+
+    /**
+     * @dev Returns the sale pause status
+     */
+    function getSalePauseStatus() external view returns (bool) {
+        return _PAUSE_SALE;
+    }
+
+    /**
+     * @dev Sets the sale pause status
+     */
+    function setSalePauseStatus(bool pause) external onlyOwner returns (bool) {
+        _PAUSE_SALE = pause;
+        return _PAUSE_SALE;
     }
 
     /**
