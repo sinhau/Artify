@@ -12,17 +12,19 @@ const nftContract = new web3.eth.Contract(contract.abi, CONTRACT_ADDRESS);
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
-async function changeSaleStartTime(weeks, days, hours, minutes, seconds) {
-    const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest"); //get latest nonce
+async function updateWhitelistStatus(status) {
+  const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest"); //get latest nonce
 
-    //the transaction
-    const tx = {
-        from: PUBLIC_KEY,
-        to: CONTRACT_ADDRESS,
-        nonce: nonce,
-        gas: 1500000,
-        data: nftContract.methods.changeSaleStartTime(newSaleTime).encodeABI(),
-    };
+  //the transaction
+  const tx = {
+    from: PUBLIC_KEY,
+    to: CONTRACT_ADDRESS,
+    nonce: nonce,
+    gas: 150000,
+    data: nftContract.methods
+      .updateWhitelistStatus(PUBLIC_KEY, status)
+      .encodeABI(),
+  };
 
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
@@ -31,9 +33,10 @@ async function changeSaleStartTime(weeks, days, hours, minutes, seconds) {
         .sendSignedTransaction(signedTx.rawTransaction, function (err, hash) {
           if (!err) {
             console.log(
-              "The hash of your transaction is: ",
-              hash,
-              "\nCheck Alchemy's Mempool to view the status of your transaction!"
+              "Changing whitelist status of ",
+              PUBLIC_KEY,
+              " to ",
+              status
             );
           } else {
             console.log(
@@ -43,7 +46,7 @@ async function changeSaleStartTime(weeks, days, hours, minutes, seconds) {
           }
         })
         .then(() => {
-          console.log("Date changed successfully!");
+          console.log("Whitelist status changed successfully!");
         });
     })
     .catch((err) => {
@@ -51,5 +54,5 @@ async function changeSaleStartTime(weeks, days, hours, minutes, seconds) {
     });
 }
 
-var newSaleTime = process.argv[2];
-changeSaleStartTime(newSaleTime);
+var status = process.argv[2] === "true" ? true : false;
+updateWhitelistStatus(status);
