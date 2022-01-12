@@ -16,7 +16,7 @@ const _LIBRARIES = {
 	},
 	"SVGGenerator": {
 		"address": process.env.SVG_GENERATOR_LIBRARY_ADDRESS,
-		"deploy": true,
+		"deploy": false,
 	},
 }
 
