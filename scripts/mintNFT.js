@@ -25,7 +25,7 @@ async function mintNFT(seed) {
     value: 10000000000000000,
     nonce: nonce,
     gas: 15000000,
-    data: nftContract.methods.mintNFT(ALTERNATE_PUBLIC_KEY, seed).encodeABI(),
+    data: nftContract.methods.mintNFT(PUBLIC_KEY, seed).encodeABI(),
   };
 
   console.log("Minting NFT with the following message:\n", seed);
