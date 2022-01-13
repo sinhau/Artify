@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 /**
  * @title On-chain generated SVG art based on seed phrase
@@ -9,20 +9,23 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "base64-sol/base64.sol";
 import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
 
-contract Artify is ERC721, Ownable {
+contract Artify is ERC721, Ownable {    
+    using Counters for Counters.Counter;
+
     mapping(uint256 => string) private _tokenSeed;
     mapping(uint256 => string) private _tokenArt;
-    mapping(address => bool) private _whitelist;
-    uint256 private _tokenID;
-    uint256 private constant _MINT_FEE = 10000000000000000;
-    uint256 private _SALE_START_TIME = 1645084801; // Feb 17, 2022 @ 12:00:01 AM (PST)
-    bool private _PAUSE_SALE = false;
+    mapping(address => bool) public whitelist;
+    Counters.Counter _tokenID;
+    uint256 public constant MINT_FEE = 10000000000000000; //Default mint fee of 0.01 ETH
+    uint256 public publicSaleStartTime = 1645084801; // Feb 17, 2022 @ 12:00:01 AM (PST)
+    bool public isSalePaused = false;
 
     constructor() public ERC721("Artify", "ARTIFY") {}
 
@@ -38,46 +41,39 @@ contract Artify is ERC721, Ownable {
     {
         // Whitelisted addresses don't need to pay mint fee
         // and they can mint anytime
-        if (_whitelist[msg.sender] == false) {
-            require(msg.value >= _MINT_FEE, "Not enough ETH to mint");
+        if (whitelist[msg.sender] == false) {
+            require(msg.value >= MINT_FEE, "Not enough ETH to mint");
             require(
-                block.timestamp >= _SALE_START_TIME,
+                block.timestamp >= publicSaleStartTime,
                 "Cannot mint NFT before the sale starts"
             );
         }
 
-        require(!_PAUSE_SALE, "Cannot mint NFT while the sale is paused");
+        require(!isSalePaused, "Cannot mint NFT while the sale is paused");
 
         bytes memory messageBytes = bytes(message);
         require(messageBytes.length > 0, "No message provided");
 
-        _tokenID += 1;
+        _tokenID.increment();
 
         // Set the token's seed
-        _tokenSeed[_tokenID] = message;
+        _tokenSeed[_tokenID.current()] = message;
 
         // Generate token art
-        _tokenArt[_tokenID] = SVGGenerator.generateArt(message);
+        _tokenArt[_tokenID.current()] = SVGGenerator.generateArt(message);
 
         // Mint the token
-        _safeMint(minter, _tokenID);
+        _safeMint(minter, _tokenID.current());
 
-        return _tokenID;
-    }
-
-    /**
-     * @dev Returns the sale pause status
-     */
-    function getSalePauseStatus() external view returns (bool) {
-        return _PAUSE_SALE;
+        return _tokenID.current();
     }
 
     /**
      * @dev Sets the sale pause status
      */
     function setSalePauseStatus(bool pause) external onlyOwner returns (bool) {
-        _PAUSE_SALE = pause;
-        return _PAUSE_SALE;
+        isSalePaused = pause;
+        return isSalePaused;
     }
 
     /**
@@ -87,33 +83,19 @@ contract Artify is ERC721, Ownable {
         external
         onlyOwner
     {
-        _whitelist[addr] = status;
+        whitelist[addr] = status;
     }
 
     /**
-     * @dev Returns the whitelist status of the given address
-     */
-    function getWhitelistStatus(address addr) external view returns (bool) {
-        return _whitelist[addr];
-    }
-
-    /**
-     * @dev Change _SALE_START_TIME by the provided epoch time in seconds
+     * @dev Change publicSaleStartTime by the provided epoch time in seconds
      */
     function changeSaleStartTime(uint256 newSaleTime)
         external
         onlyOwner
         returns (uint256)
     {
-        _SALE_START_TIME = newSaleTime;
-        return _SALE_START_TIME;
-    }
-
-    /**
-     * @dev Get current _SALE_START_TIME
-     */
-    function getSaleStartTime() external view returns (uint256) {
-        return _SALE_START_TIME;
+        publicSaleStartTime = newSaleTime;
+        return publicSaleStartTime;
     }
 
     /**
@@ -162,10 +144,9 @@ contract Artify is ERC721, Ownable {
         override
         returns (string memory)
     {
-        string memory seed = _tokenSeed[tokenID];
-        bytes memory seedBytes = bytes(seed);
-        require(seedBytes.length > 0, "TokenID not created yet");
+        require(tokenID <= _tokenID.current(), "TokenID not created yet");
 
+        string memory seed = _tokenSeed[tokenID];
         string memory _tokenURI = generateTokenURI(seed, tokenID);
         return _tokenURI;
     }
@@ -178,9 +159,7 @@ contract Artify is ERC721, Ownable {
      * Returns SVG art as XML formatted string.
      */
     function getArt(uint256 tokenID) external view returns (string memory) {
-        string memory seed = _tokenSeed[tokenID];
-        bytes memory seedBytes = bytes(seed);
-        require(seedBytes.length > 0, "TokenID not created yet");
+        require(tokenID <= _tokenID.current(), "TokenID not created yet");
 
         return _tokenArt[tokenID];
     }

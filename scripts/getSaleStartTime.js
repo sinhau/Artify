@@ -13,7 +13,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
 async function getSaleStartTime() {
-  const resp = await nftContract.methods.getSaleStartTime().call();
+  const resp = await nftContract.methods.publicSaleStartTime().call();
   var saleTime = new Date(0); // The 0 there is the key, which sets the date to the epoch
   saleTime.setUTCSeconds(resp);
   console.log(saleTime.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));

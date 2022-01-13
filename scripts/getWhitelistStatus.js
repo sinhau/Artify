@@ -13,7 +13,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
 async function getWhitelistStatus() {
-  const resp = await nftContract.methods.getWhitelistStatus(PUBLIC_KEY).call();
+  const resp = await nftContract.methods.whitelist(PUBLIC_KEY).call();
   console.log("Whitelist status of ", PUBLIC_KEY, " is ", resp);
 }
 

@@ -13,7 +13,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
 async function getPauseStatus() {
-  const resp = await nftContract.methods.getSalePauseStatus().call();
+  const resp = await nftContract.methods.isSalePaused().call();
   console.log(resp);
 }
 
