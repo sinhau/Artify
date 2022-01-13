@@ -45,7 +45,7 @@ contract Artify is ERC721, Ownable {
             require(msg.value >= MINT_FEE, "Not enough ETH to mint");
             require(
                 block.timestamp >= publicSaleStartTime,
-                "Cannot mint NFT before the sale starts"
+                "Cannot mint NFT before public sale starts"
             );
         }
 
