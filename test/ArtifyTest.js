@@ -23,7 +23,8 @@ const _LIBRARIES = {
 
 describe("Artify", function () {
   before(async function () {
-    [this.owner] = await ethers.getSigners();
+    this.accounts = await ethers.getSigners();
+    this.owner = this.accounts[0];
 
     // Deploy libraries
     for (key in _LIBRARIES) {
@@ -180,6 +181,20 @@ describe("Artify", function () {
         this.artifyContract.address
       );
       expect(contractBalance.div(1000000000).toString()).to.equal("0");
+    });
+
+    it("Validate minting from multiple addresses", async function () {
+      await this.artifyContract.updateWhitelistStatus(this.owner.address, true);
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+        value: ethers.utils.parseEther("0.01"),
+      });
+      expect(await this.artifyContract.ownerOf(1)).to.equal(this.owner.address);
+
+      await this.artifyContract.updateWhitelistStatus(this.accounts[1].address, true);
+      await this.artifyContract.mintNFT(this.accounts[1].address, "Test minting 2", {
+        value: ethers.utils.parseEther("0.01"),
+      });
+      expect(await this.artifyContract.ownerOf(2)).to.equal(this.accounts[1].address);
     });
   });
 });
