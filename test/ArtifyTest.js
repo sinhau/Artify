@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { ethers } = require("hardhat");
 require("dotenv").config();
 
 const _LIBRARIES = {
@@ -63,12 +64,122 @@ describe("Artify", function () {
     });
     this.artifyContract = await contractFactory.deploy();
 
-    console.log("       Artify contract deployed at: ", this.artifyContract.address, "\n");
+    // console.log(
+    //   "       Artify contract deployed at: ",
+    //   this.artifyContract.address,
+    //   "\n"
+    // );
   });
 
   describe("Deployment", function () {
     it("Contract owner should be the hardhat owner address", async function () {
       expect(await this.artifyContract.owner()).to.equal(this.owner.address);
+    });
+  });
+
+  describe("Minting", function () {
+    it("Validate MINT_FEE working correctly", async function () {
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting")
+      ).to.be.revertedWith("Not enough ETH to mint");
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+          value: ethers.utils.parseEther("0.001"),
+        })
+      ).to.be.revertedWith("Not enough ETH to mint");
+
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+          value: ethers.utils.parseEther("0.01"),
+        })
+      ).to.be.revertedWith("Cannot mint NFT before public sale starts");
+    });
+
+    it("Validate public sale modification/check working correctly", async function () {
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+          value: ethers.utils.parseEther("0.01"),
+        })
+      ).to.be.revertedWith("Cannot mint NFT before public sale starts");
+
+      await this.artifyContract.changeSaleStartTime(1545084801);
+
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+        value: ethers.utils.parseEther("0.01"),
+      });
+
+      expect(await this.artifyContract.ownerOf(1)).to.equal(this.owner.address);
+    });
+
+    it("Validate isSalePaused update/check working correctly", async function () {
+      await this.artifyContract.changeSaleStartTime(1545084801);
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+        value: ethers.utils.parseEther("0.01"),
+      });
+      expect(await this.artifyContract.ownerOf(1)).to.equal(this.owner.address);
+
+      await this.artifyContract.setSalePauseStatus(true);
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+          value: ethers.utils.parseEther("0.01"),
+        })
+      ).to.be.revertedWith("Cannot mint NFT while the sale is paused");
+    });
+
+    it("Validate whitelisting working correctly", async function () {
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting")
+      ).to.be.revertedWith("Not enough ETH to mint");
+
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+          value: ethers.utils.parseEther("0.01"),
+        })
+      ).to.be.revertedWith("Cannot mint NFT before public sale starts");
+
+      await this.artifyContract.updateWhitelistStatus(this.owner.address, true);
+
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting");
+
+      expect(await this.artifyContract.ownerOf(1)).to.equal(this.owner.address);
+    });
+
+    it("Validate empty message check working correctly", async function () {
+      await this.artifyContract.updateWhitelistStatus(this.owner.address, true);
+
+      await expect(
+        this.artifyContract.mintNFT(this.owner.address, "")
+      ).to.be.revertedWith("No message provided");
+
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting");
+
+      expect(await this.artifyContract.ownerOf(1)).to.equal(this.owner.address);
+    });
+
+    it("Should not be able to get seed for tokenID 1", async function () {
+      await expect(this.artifyContract.tokenURI(1)).to.be.revertedWith(
+        "TokenID not created yet"
+      );
+    });
+
+    it("Validate balance withdrawal working correctly", async function () {
+      await this.artifyContract.updateWhitelistStatus(this.owner.address, true);
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+        value: ethers.utils.parseEther("0.01"),
+      });
+      await this.artifyContract.mintNFT(this.owner.address, "Test minting", {
+        value: ethers.utils.parseEther("0.01"),
+      });
+      var contractBalance = await this.artifyContract.provider.getBalance(
+        this.artifyContract.address
+      );
+      expect(contractBalance.div(1000000000).toString()).to.equal("20000000");
+
+      await this.artifyContract.withdrawFullBalance();
+      contractBalance = await this.artifyContract.provider.getBalance(
+        this.artifyContract.address
+      );
+      expect(contractBalance.div(1000000000).toString()).to.equal("0");
     });
   });
 });

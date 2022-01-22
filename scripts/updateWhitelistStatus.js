@@ -20,7 +20,7 @@ async function updateWhitelistStatus(status) {
     from: PUBLIC_KEY,
     to: CONTRACT_ADDRESS,
     nonce: nonce,
-    gas: 150000,
+    gas: 1500000,
     data: nftContract.methods
       .updateWhitelistStatus(PUBLIC_KEY, status)
       .encodeABI(),

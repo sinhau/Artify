@@ -86,15 +86,6 @@ library SVGGenerator {
                 "</g>",
             "</svg>"));
     }
-
-    /**
-     * @dev Predefined image for the contract metadata
-     */
-    function generateContractImage() external pure returns (string memory image) {
-        image = string(abi.encodePacked(
-            "<svg version='1.1' width='640' height='640' viewbox='0 0 640 640' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:hsl(0, 100%, 0%)'><metadata><contract>Artify: Permanently memorialize a message, quote, or any other text-based input on the blockchain.  Artify converts your input into a one-of-a-kind on-chain generated artwork that you can share with your friends, family, and the world. Created by karsh.eth</contract></metadata><defs><filter id='blendSoft' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter><filter id='blendHard'><feGaussianBlur in='SourceGraphic' stdDeviation='1' /></filter><path id='parentPolygon' d='M 0 0 C -18 10, -35 -21, -51 22 S 70 1, -39 3 S 71 -4, 0 0' /><g id='polygonGroups'><use xlink:href='#parentPolygon' fill='hsl(57,85%,48%)' filter='url(#blendHard)' ><animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;167;0;' dur='16s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(1.97 0.68 0.10 1.35 -1.12 -1.50)' fill='hsl(87,85%,48%)' filter='url(#blendSoft)' ><animate attributeName='opacity' values='1;0.3;1' dur='4s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;161;0;' dur='24s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(-0.33 -1.11 1.81 0.77 -1.98 1.34)' fill='hsl(117,85%,48%)' filter='url(#blendHard)' ><animate attributeName='opacity' values='1;0.3;1' dur='6s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;146;0;' dur='27s' repeatCount='indefinite' additive='sum'/></use><use xlink:href='#parentPolygon' transform='matrix(1.30 1.66 -1.86 0.88 1.12 0.98)' fill='hsl(117,85%,48%)' filter='url(#blendSoft)' ><animate attributeName='opacity' values='1;0.3;1' dur='8s' repeatCount='indefinite'/><animateTransform attributeName='transform' attributeType='XML' type='translateX' values='0;165;0;' dur='11s' repeatCount='indefinite' additive='sum'/></use></g></defs><rect width='100%' height='100%' fill='hsl(0, 100%, 0%)'/><g><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(0,0,0)'/><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(60,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(120,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(180,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(240,0,0)' /><use xlink:href='#polygonGroups' transform='translate(320, 320) rotate(300,0,0)' /><animateTransform attributeName='transform' attributeType='XML' type='rotate' values='0 320 320;360 320 320' dur='20s' repeatCount='indefinite'/></g></svg>"
-        ));
-    }
    
     /**
      * @dev Generate pseudo-random SVG art attributes based on the given seed
@@ -202,42 +193,6 @@ library SVGGenerator {
         newHashOfSeed = currentHashOfSeed;
     }
 
-
-    /**
-     * @dev Generates an SVG polygon using the provided hash of seed
-     * @param currentHashOfSeed The seed to use for generating the polygon
-     * @param numOfEdges Number of edges in the polygon
-     * @param id ID of the polygon element
-     * @param min Minimum coordinate value of a polygon vertex
-     * @param max Maximum coordinate value of a polygon vertex
-     * Returns an SVG polygon element as a string
-     */
-    function generatePolygon(bytes32 currentHashOfSeed, uint numOfEdges, string memory id, int min, int max) private pure returns (string memory polygon, bytes32 newHashOfSeed) {
-        // Generate all the vertices of the polygon
-        string[] memory points = new string[](numOfEdges - 1);
-        int x;
-        int y;
-        for (uint i = 0; i < numOfEdges - 1; i++) {
-            (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-            (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, min, max);
-            points[i] = string(abi.encodePacked(StringConversions.int256ToString(x), ",", StringConversions.int256ToString(y)));
-        }
-
-        // Update the hash of the seed
-        newHashOfSeed = currentHashOfSeed;
-
-        // Assemble the polygon SVG element
-        string memory polygon_points = "0,0 ";
-        for (uint i = 0; i < numOfEdges - 1; i++) {
-            polygon_points = string(abi.encodePacked(polygon_points, points[i], " "));
-        }
-        polygon_points = string(abi.encodePacked(polygon_points, "0,0"));
-        polygon = string(abi.encodePacked(
-            "<polyline id='", id, "' ",
-            "points='", polygon_points, "' />"
-        ));
-    }
-
     /**
      * @dev Generate a transform matrix 
      * @param currentHashOfSeed The seed to use for generating the circle
@@ -253,27 +208,6 @@ library SVGGenerator {
             transformMatrix = string(abi.encodePacked(transformMatrix, StringConversions.decimalTwoSigFigsToStrings(x), (i == 5) ? "": " "));
         }
         transformMatrix = string(abi.encodePacked(transformMatrix, ")"));
-
-        newHashOfSeed = currentHashOfSeed;
-    }
-
-    /**
-     * @dev Generate a translate transformation
-     * @param currentHashOfSeed The seed to use for generating the circle
-     * @param minX Min translate x value
-     * @param maxX Max translate x value
-     * @param minY Min translate y value
-     * @param maxY Max translate y value
-     * Returns a translate transformation as a string
-     */
-    function generateTranslate(bytes32 currentHashOfSeed, int minX, int maxX, int minY, int maxY) private pure returns (string memory translate, bytes32 newHashOfSeed) {
-        int x;
-        int y;
-        (x, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minX, maxX);
-        (y, currentHashOfSeed) = SeededRandomGenerator.randomInt(currentHashOfSeed, minY, maxY);
-        translate = string(abi.encodePacked(
-            "translate(", StringConversions.int256ToString(x), ",", StringConversions.int256ToString(y), ")"
-        ));
 
         newHashOfSeed = currentHashOfSeed;
     }

@@ -16,11 +16,10 @@ import "./libraries/SVGGenerator.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
 
-contract Artify is ERC721, Ownable {    
+contract Artify is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     mapping(uint256 => string) private _tokenSeed;
-    mapping(uint256 => string) private _tokenArt;
     mapping(address => bool) public whitelist;
     Counters.Counter _tokenID;
     uint256 public constant MINT_FEE = 10000000000000000; //Default mint fee of 0.01 ETH
@@ -34,11 +33,7 @@ contract Artify is ERC721, Ownable {
      *
      * Returns the token ID of the newly minted NFT.
      */
-    function mintNFT(address minter, string calldata message)
-        external
-        payable
-        returns (uint256)
-    {
+    function mintNFT(address minter, string calldata message) external payable {
         // Whitelisted addresses don't need to pay mint fee
         // and they can mint anytime
         if (whitelist[msg.sender] == false) {
@@ -55,17 +50,15 @@ contract Artify is ERC721, Ownable {
         require(messageBytes.length > 0, "No message provided");
 
         _tokenID.increment();
+        uint256 tokenID = _tokenID.current();
 
         // Set the token's seed
-        _tokenSeed[_tokenID.current()] = message;
-
-        // Generate token art
-        _tokenArt[_tokenID.current()] = SVGGenerator.generateArt(message);
+        _tokenSeed[tokenID] = message;
 
         // Mint the token
-        _safeMint(minter, _tokenID.current());
+        _safeMint(minter, tokenID);
 
-        return _tokenID.current();
+        // return _tokenID.current();
     }
 
     /**
@@ -103,7 +96,7 @@ contract Artify is ERC721, Ownable {
      */
     function contractURI() public pure returns (string memory) {
         string memory contractImage = Base64.encode(
-            bytes(SVGGenerator.generateContractImage())
+            bytes(SVGGenerator.generateArt("Artify by karsh.eth"))
         );
 
         return
@@ -154,14 +147,15 @@ contract Artify is ERC721, Ownable {
     /**
      * @dev Get SVG art based on token's seed.
      *
-     * @param tokenID The token ID.
+     * @param tokenID The seed to generate art from
      *
      * Returns SVG art as XML formatted string.
      */
     function getArt(uint256 tokenID) external view returns (string memory) {
         require(tokenID <= _tokenID.current(), "TokenID not created yet");
 
-        return _tokenArt[tokenID];
+        string memory seed = _tokenSeed[tokenID];
+        return SVGGenerator.generateArt(seed);
     }
 
     /**
@@ -170,10 +164,10 @@ contract Artify is ERC721, Ownable {
      */
     function generateTokenURI(string memory seed, uint256 tokenID)
         private
-        view
+        pure
         returns (string memory)
     {
-        string memory image = Base64.encode(bytes(_tokenArt[tokenID]));
+        string memory image = SVGGenerator.generateArt(seed);
 
         // Get art attributes
         ArtAttributes memory artAttributes;
@@ -199,22 +193,30 @@ contract Artify is ERC721, Ownable {
         attributes = string(
             abi.encodePacked(
                 "[",
-                    "{",
-                        '"trait_type":"Bezier Curve Count",',
-                        '"value":"', Strings.toString(uint256(artAttributes.numOfEdges)), '"',
-                    "},",
-                    "{",
-                        '"trait_type":"Layer Count",',
-                        '"value":"', Strings.toString(uint256(artAttributes.numOfPolygonGroups)), '"',
-                    "},",
-                    "{",
-                        '"trait_type":"Color Scheme",',
-                        '"value":"', colorScheme, '"',
-                    "},",
-                    "{",
-                        '"trait_type":"Root HSL",',
-                        '"value":"', HSLGenerator.toString(hsl), '"',
-                    "}",
+                "{",
+                '"trait_type":"Bezier Curve Count",',
+                '"value":"',
+                Strings.toString(uint256(artAttributes.numOfEdges)),
+                '"',
+                "},",
+                "{",
+                '"trait_type":"Layer Count",',
+                '"value":"',
+                Strings.toString(uint256(artAttributes.numOfPolygonGroups)),
+                '"',
+                "},",
+                "{",
+                '"trait_type":"Color Scheme",',
+                '"value":"',
+                colorScheme,
+                '"',
+                "},",
+                "{",
+                '"trait_type":"Root HSL",',
+                '"value":"',
+                HSLGenerator.toString(hsl),
+                '"',
+                "}",
                 "]"
             )
         );
@@ -226,10 +228,17 @@ contract Artify is ERC721, Ownable {
                     Base64.encode(
                         bytes(
                             abi.encodePacked(
-                                '{"name":"Artify #', Strings.toString(tokenID), '",',
-                                '"description":"', seed, '",',
-                                '"image":"data:image/svg+xml;base64,', image, '",',
-                                '"attributes":', attributes,
+                                '{"name":"Artify #',
+                                Strings.toString(tokenID),
+                                '",',
+                                '"description":"',
+                                seed,
+                                '",',
+                                '"image":"data:image/svg+xml;base64,',
+                                image,
+                                '",',
+                                '"attributes":',
+                                attributes,
                                 "}"
                             )
                         )

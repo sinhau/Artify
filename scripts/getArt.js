@@ -12,11 +12,11 @@ const nftContract = new web3.eth.Contract(contract.abi, CONTRACT_ADDRESS);
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
-async function getTokenArt(tokenID) {
-  const resp = await nftContract.methods.getArt(tokenID).call();
+async function getTokenArt(seed) {
+  const resp = await nftContract.methods.getArt(seed).call();
   console.log(resp);
 }
 
-var tokenID = process.argv[2];
-console.log('Getting art for tokenID: ', tokenID);
-getTokenArt(tokenID);
+var seed = process.argv[2];
+console.log('Getting art for seed: ', seed);
+getTokenArt(seed);
