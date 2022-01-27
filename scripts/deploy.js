@@ -16,7 +16,7 @@ const _LIBRARIES = {
 	},
 	"SVGGenerator": {
 		"address": process.env.SVG_GENERATOR_LIBRARY_ADDRESS,
-		"deploy": true,
+		"deploy": false,
 	},
 }
 
@@ -58,6 +58,7 @@ async function deployContract() {
       libraries: {
         "HSLGenerator": _LIBRARIES["HSLGenerator"]["address"],
         "SVGGenerator": _LIBRARIES["SVGGenerator"]["address"],
+        "StringConversions": _LIBRARIES["StringConversions"]["address"],
       },
     }
   );

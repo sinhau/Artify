@@ -15,7 +15,7 @@ const PUBLIC_KEY = process.env.PUBLIC_KEY;
 const ALTERNATE_PRIVATE_KEY = process.env.ALTERNATE_PRIVATE_KEY;
 const ALTERNATE_PUBLIC_KEY = process.env.ALTERNATE_PUBLIC_KEY;
 
-async function mintNFT(seed) {
+async function mintWalletAvatar() {
   const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest"); //get latest nonce
 
   //the transaction
@@ -24,11 +24,11 @@ async function mintNFT(seed) {
     to: CONTRACT_ADDRESS,
     value: 10000000000000000,
     nonce: nonce,
-    gas: 15000000,
-    data: nftContract.methods.mintNFT(PUBLIC_KEY, seed).encodeABI(),
+    gas: 150000,
+    data: nftContract.methods.mintWalletAvatar().encodeABI(),
   };
 
-  console.log("Minting NFT with the following message:\n", seed);
+  console.log("Minting NFT")// with the following message:\n", seed);
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
     .then((signedTx) => {
@@ -56,5 +56,5 @@ async function mintNFT(seed) {
     });
 }
 
-var seed = process.argv[2];
-mintNFT(seed);
+// var seed = process.argv[2];
+mintWalletAvatar();

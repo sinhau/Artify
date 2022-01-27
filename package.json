@@ -20,10 +20,12 @@
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "chai": "^4.3.4",
+    "dom-parser": "^0.1.6",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.1",
     "hardhat": "^2.7.0",
-    "hardhat-gas-reporter": "^1.0.7"
+    "hardhat-gas-reporter": "^1.0.7",
+    "keccak256": "^1.0.6"
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.1.8",

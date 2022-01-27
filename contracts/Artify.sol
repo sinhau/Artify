@@ -13,6 +13,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "base64-sol/base64.sol";
 import "./libraries/HSLGenerator.sol";
 import "./libraries/SVGGenerator.sol";
+import "./libraries/StringConversions.sol";
 import "./structs/HSL.sol";
 import "./structs/ArtAttributes.sol";
 
@@ -20,6 +21,7 @@ contract Artify is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     mapping(uint256 => string) private _tokenSeed;
+    mapping(address => int) private _hasWalletAvatar;
     mapping(address => bool) public whitelist;
     Counters.Counter _tokenID;
     uint256 public constant MINT_FEE = 10000000000000000; //Default mint fee of 0.01 ETH
@@ -33,7 +35,10 @@ contract Artify is ERC721, Ownable {
      *
      * Returns the token ID of the newly minted NFT.
      */
-    function mintNFT(address minter, string calldata message) external payable {
+    function mintWalletAvatar() external payable {
+        require(_hasWalletAvatar[msg.sender] == 0, "Wallet already has an avatar");
+        _hasWalletAvatar[msg.sender] = 1;
+
         // Whitelisted addresses don't need to pay mint fee
         // and they can mint anytime
         if (whitelist[msg.sender] == false) {
@@ -46,19 +51,43 @@ contract Artify is ERC721, Ownable {
 
         require(!isSalePaused, "Cannot mint NFT while the sale is paused");
 
-        bytes memory messageBytes = bytes(message);
+        // bytes memory messageBytes = bytes(message);
+        // require(messageBytes.length > 0, "No message provided");
+
+        _tokenID.increment();
+        uint256 tokenID = _tokenID.current();
+
+        // Mint the token
+        _safeMint(msg.sender, tokenID);
+    }
+
+    /**
+     * @dev Mint an NFT based on provided message as seed
+     * @param seed The seed phrase to generate the NFT
+     */
+    function mintMessage(string memory seed) external payable {
+        // Whitelisted addresses don't need to pay mint fee
+        // and they can mint anytime
+        if (whitelist[msg.sender] == false) {
+            require(msg.value >= MINT_FEE, "Not enough ETH to mint");
+            require(
+                block.timestamp >= publicSaleStartTime,
+                "Cannot mint NFT before public sale starts"
+            );
+        }
+
+        require(!isSalePaused, "Cannot mint NFT while the sale is paused");
+
+        bytes memory messageBytes = bytes(seed);
         require(messageBytes.length > 0, "No message provided");
 
         _tokenID.increment();
         uint256 tokenID = _tokenID.current();
 
-        // Set the token's seed
-        _tokenSeed[tokenID] = message;
+        _tokenSeed[tokenID] = seed;
 
         // Mint the token
-        _safeMint(minter, tokenID);
-
-        // return _tokenID.current();
+        _safeMint(msg.sender, tokenID);
     }
 
     /**
@@ -140,7 +169,15 @@ contract Artify is ERC721, Ownable {
         require(tokenID <= _tokenID.current(), "TokenID not created yet");
 
         string memory seed = _tokenSeed[tokenID];
-        string memory _tokenURI = generateTokenURI(seed, tokenID);
+        bytes memory seedBytes = bytes(seed);
+        string memory input;
+        if (seedBytes.length == 0) {
+            input = StringConversions.addressToString(this.ownerOf(tokenID));
+        } else {
+            input = seed;
+        }
+
+        string memory _tokenURI = generateTokenURI(input, tokenID);
         return _tokenURI;
     }
 
@@ -155,7 +192,15 @@ contract Artify is ERC721, Ownable {
         require(tokenID <= _tokenID.current(), "TokenID not created yet");
 
         string memory seed = _tokenSeed[tokenID];
-        return SVGGenerator.generateArt(seed);
+        bytes memory seedBytes = bytes(seed);
+        string memory input;
+        if (seedBytes.length == 0) {
+            input = StringConversions.addressToString(this.ownerOf(tokenID));
+        } else {
+            input = seed;
+        }
+
+        return SVGGenerator.generateArt(input);
     }
 
     /**
@@ -235,7 +280,7 @@ contract Artify is ERC721, Ownable {
                                 seed,
                                 '",',
                                 '"image":"data:image/svg+xml;base64,',
-                                image,
+                                Base64.encode(bytes(image)),
                                 '",',
                                 '"attributes":',
                                 attributes,
