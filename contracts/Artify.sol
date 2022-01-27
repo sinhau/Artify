@@ -21,7 +21,7 @@ contract Artify is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     mapping(uint256 => string) private _tokenSeed;
-    mapping(address => int) private _hasWalletAvatar;
+    mapping(address => int) public _hasWalletAvatar;
     mapping(address => bool) public whitelist;
     Counters.Counter _tokenID;
     uint256 public constant MINT_FEE = 10000000000000000; //Default mint fee of 0.01 ETH
@@ -37,7 +37,6 @@ contract Artify is ERC721, Ownable {
      */
     function mintWalletAvatar() external payable {
         require(_hasWalletAvatar[msg.sender] == 0, "Wallet already has an avatar");
-        _hasWalletAvatar[msg.sender] = 1;
 
         // Whitelisted addresses don't need to pay mint fee
         // and they can mint anytime
@@ -51,8 +50,7 @@ contract Artify is ERC721, Ownable {
 
         require(!isSalePaused, "Cannot mint NFT while the sale is paused");
 
-        // bytes memory messageBytes = bytes(message);
-        // require(messageBytes.length > 0, "No message provided");
+        _hasWalletAvatar[msg.sender] = 1;
 
         _tokenID.increment();
         uint256 tokenID = _tokenID.current();
