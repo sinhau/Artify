@@ -24,7 +24,7 @@ contract Artify is ERC721, Ownable {
     mapping(address => int) public _hasWalletAvatar;
     mapping(address => bool) public whitelist;
     Counters.Counter _tokenID;
-    uint256 public constant MINT_FEE = 10000000000000000; //Default mint fee of 0.01 ETH
+    uint256 public constant MINT_FEE = 0.01 ether; //Default mint fee of 0.01 ETH
     uint256 public publicSaleStartTime = 1645084801; // Feb 17, 2022 @ 12:00:01 AM (PST)
     bool public isSalePaused = false;
 
@@ -40,7 +40,7 @@ contract Artify is ERC721, Ownable {
 
         // Whitelisted addresses don't need to pay mint fee
         // and they can mint anytime
-        if (whitelist[msg.sender] == false) {
+        if (!whitelist[msg.sender]) {
             require(msg.value >= MINT_FEE, "Not enough ETH to mint");
             require(
                 block.timestamp >= publicSaleStartTime,
@@ -63,10 +63,10 @@ contract Artify is ERC721, Ownable {
      * @dev Mint an NFT based on provided message as seed
      * @param seed The seed phrase to generate the NFT
      */
-    function mintMessage(string memory seed) external payable {
+    function mintMessage(string calldata seed) external payable {
         // Whitelisted addresses don't need to pay mint fee
         // and they can mint anytime
-        if (whitelist[msg.sender] == false) {
+        if (!whitelist[msg.sender]) {
             require(msg.value >= MINT_FEE, "Not enough ETH to mint");
             require(
                 block.timestamp >= publicSaleStartTime,
@@ -76,7 +76,7 @@ contract Artify is ERC721, Ownable {
 
         require(!isSalePaused, "Cannot mint NFT while the sale is paused");
 
-        bytes memory messageBytes = bytes(seed);
+        bytes calldata messageBytes = bytes(seed);
         require(messageBytes.length > 0, "No message provided");
 
         _tokenID.increment();
@@ -121,7 +121,7 @@ contract Artify is ERC721, Ownable {
     /**
      * @dev Generate contract metadata
      */
-    function contractURI() public pure returns (string memory) {
+    function contractURI() external pure returns (string memory) {
         string memory contractImage = Base64.encode(
             bytes(SVGGenerator.generateArt("Artify by karsh.eth"))
         );

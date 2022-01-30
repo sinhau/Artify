@@ -37,7 +37,7 @@ library StringConversions {
      * @param _address The wallet address to convert to a string
      * @return result The string representation of the wallet address
      */
-    function addressToString(address _address) public pure returns (string memory result) {
+    function addressToString(address _address) external pure returns (string memory result) {
         bytes memory s = new bytes(40);
         for (uint i = 0; i < 20; i++) {
             bytes1 b = bytes1(uint8(uint(uint160(_address)) / (2**(8*(19 - i)))));

@@ -13,7 +13,7 @@ library SeededRandomGenerator {
      * @param seed The seed to initialize the random number generator
      * @return hashOfSeed The hash of the seed
      */
-    function init(string memory seed) external pure returns (bytes32 hashOfSeed) {
+    function init(string calldata seed) external pure returns (bytes32 hashOfSeed) {
         hashOfSeed = keccak256(abi.encodePacked(seed));
     }
 
